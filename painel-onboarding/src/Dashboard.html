@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html><head><base target="_top"><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#010613;--card:#111A24;--line:#1D2A38;--cy:#00CFFF;--cy2:#52CEF5;--cy3:#109CC8;
+--amb:#F2A93B;--red:#FF5C5C;--grn:#3DD68C;--mut:#7A8A99;--tx:#E6EDF3}
+body{background:var(--bg);color:var(--tx);font-family:Inter,system-ui,-apple-system,sans-serif;
+font-size:14px;line-height:1.55;padding:22px}
+h1,h2,h3{font-family:Montserrat,system-ui,sans-serif;letter-spacing:-.015em}
+.top{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;
+padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:22px}
+h1{font-size:24px;font-weight:800}
+h1 em{font-style:normal;color:var(--cy)}
+.dt{font-family:ui-monospace,monospace;font-size:12px;color:var(--cy2);
+background:rgba(0,207,255,.08);border:1px solid rgba(0,207,255,.26);padding:5px 12px;border-radius:20px}
+h2{font-size:17px;font-weight:700;margin:28px 0 12px;padding-bottom:9px;border-bottom:1px solid var(--line)}
+h2 span{font-size:12px;color:var(--mut);font-weight:500;font-family:Inter;margin-left:9px}
+.kpis{display:flex;flex-wrap:wrap;gap:12px}
+.kpi{flex:1 1 175px;min-width:165px;background:var(--card);border:1px solid var(--line);
+border-left:3px solid var(--cy);border-radius:9px;padding:15px}
+.kpi.a{border-left-color:var(--amb)}.kpi.r{border-left-color:var(--red)}.kpi.g{border-left-color:var(--grn)}
+.kpi b{font-family:Montserrat;font-size:28px;font-weight:800;display:block;line-height:1.05;color:var(--cy2)}
+.kpi.a b{color:var(--amb)}.kpi.r b{color:var(--red)}.kpi.g b{color:var(--grn)}
+.kpi span{font-size:12px;color:#9FB0BF;display:block;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);
+border:1px solid var(--line);border-radius:9px;overflow:hidden}
+th{text-align:left;font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.08em;
+text-transform:uppercase;color:var(--cy3);padding:11px 10px;border-bottom:1px solid var(--line);font-weight:500}
+td{padding:9px 10px;border-bottom:1px solid #131E29}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(0,207,255,.04)}
+td.n{font-family:ui-monospace,monospace;text-align:right;font-weight:600}
+.hi{color:var(--cy2)}.tw{color:var(--amb)}.tr{color:var(--red)}.tg{color:var(--grn)}
+.mut{color:var(--mut)}
+.chart{width:100%;height:auto;display:block;background:var(--card);
+border:1px solid var(--line);border-radius:9px;padding:12px}
+.grid{stroke:#18242F;stroke-width:1}
+.ax{font-family:ui-monospace,monospace;font-size:10px;fill:#63788A}
+.vl{font-family:ui-monospace,monospace;font-size:10px;font-weight:700}
+.ac{text-anchor:middle}.ar{text-anchor:end}
+.leg{display:flex;flex-wrap:wrap;gap:16px;margin-top:10px;font-size:12px;color:#9FB0BF}
+.leg i{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:6px}
+.two{display:flex;gap:16px;flex-wrap:wrap}.two>*{flex:1 1 440px;min-width:380px}
+.tag{font-family:ui-monospace,monospace;font-size:10px;padding:2px 7px;border-radius:10px;
+background:rgba(255,92,92,.12);color:var(--red);white-space:nowrap}
+.load{text-align:center;padding:70px 0;color:var(--mut)}
+.pb{background:linear-gradient(160deg,#0C1622,#0A1119);border:1px solid var(--line);
+border-radius:11px;padding:17px;margin-bottom:13px}
+.pb-h{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+padding-bottom:12px;margin-bottom:13px;border-bottom:1px solid var(--line)}
+.pb-h h3{font-size:17px;font-weight:700}
+.pb-t{font-family:ui-monospace,monospace;font-size:11.5px;color:var(--cy2);
+background:rgba(0,207,255,.08);border:1px solid rgba(0,207,255,.26);padding:4px 11px;border-radius:20px}
+.pb .kpi{flex:1 1 128px;min-width:120px;padding:12px}
+.pb .kpi b{font-size:23px}.pb .kpi span{font-size:11px}
+.eq{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-family:ui-monospace,monospace;
+font-size:13px;background:#0A1119;border-radius:8px;padding:11px 13px;margin-top:12px}
+.eq i{font-style:normal;color:var(--mut);font-size:16px}
+.eq b{font-size:16px}
+.eq .lbl{font-size:10px;color:var(--mut);display:block;font-family:Inter,sans-serif;text-align:center}
+.eq .cel{text-align:center;min-width:52px}
+.eq .ok{color:var(--grn)}.eq .no{color:var(--red)}
+.bar{display:flex;height:24px;border-radius:5px;overflow:hidden;background:#0A1119}
+.bar span{display:block;font-size:10px;font-family:ui-monospace,monospace;color:#031019;
+text-align:center;line-height:24px;font-weight:700}
+.empty{background:rgba(242,169,59,.06);border:1px solid rgba(242,169,59,.26);
+border-left:3px solid var(--amb);border-radius:9px;padding:15px 18px;color:#9FB0BF;font-size:13px}
+.empty b{color:var(--amb)}
+.como{background:rgba(0,207,255,.05);border:1px solid rgba(0,207,255,.22);border-left:3px solid var(--cy);
+border-radius:9px;padding:14px 17px;margin-bottom:12px;font-size:13px;color:#9FB0BF}
+.como h4{font-size:13.5px;color:var(--cy2);margin-bottom:7px;font-weight:600;font-family:Montserrat,sans-serif}
+.como p{margin-bottom:7px}.como p:last-child{margin-bottom:0}
+.como b{color:var(--tx)}
+.como .reg{display:block;margin-top:9px;padding-top:9px;border-top:1px solid var(--line);
+font-size:12.5px}
+.mov{display:flex;gap:16px;flex-wrap:wrap;margin-top:9px;font-size:12.5px}
+.mov div{flex:1 1 240px}
+.mov .tit{font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.08em;
+text-transform:uppercase;color:var(--mut);margin-bottom:4px}
+.mov ul{margin-left:15px;color:#9FB0BF}.mov li{margin-bottom:2px}
+.ins{margin-top:14px;padding-top:13px;border-top:1px solid var(--line);display:flex;
+flex-wrap:wrap;gap:10px}
+.ic{flex:1 1 300px;min-width:280px;background:#0A1119;border-radius:9px;padding:13px 15px;
+border-left:3px solid var(--cy)}
+.ic.trava{border-left-color:var(--red)}.ic.gargalo{border-left-color:var(--amb)}
+.ic.meta{border-left-color:var(--cy)}.ic.ok{border-left-color:var(--grn)}
+.ic h5{font-family:ui-monospace,monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+margin-bottom:5px;font-weight:500;color:var(--cy2)}
+.ic.trava h5{color:var(--red)}.ic.gargalo h5{color:var(--amb)}.ic.ok h5{color:var(--grn)}
+.ic p{font-size:13px;color:#9FB0BF;line-height:1.5}
+.ic b{color:var(--tx)}
+.one{background:linear-gradient(150deg,#0C1826,#0A1119);border:1px solid rgba(0,207,255,.3);
+border-radius:12px;padding:22px 24px;margin-bottom:26px}
+.ato{margin:38px 0 18px;padding:16px 20px;background:linear-gradient(90deg,rgba(0,207,255,.10),transparent);
+border-left:3px solid var(--cy);border-radius:0 9px 9px 0}
+.ato-n{font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.2em;color:var(--cy3);display:block}
+.ato-t{font-family:Montserrat,sans-serif;font-size:22px;font-weight:800;margin:3px 0 2px}
+.ato p{font-size:13px;color:var(--mut)}
+.modo{display:flex;gap:8px;margin-bottom:18px;align-items:center;flex-wrap:wrap}
+.modo button{font-family:Inter,sans-serif;font-size:13px;background:var(--card);color:#9FB0BF;
+border:1px solid var(--line);border-radius:22px;padding:8px 18px;cursor:pointer;font-weight:500}
+.modo button.on{background:rgba(0,207,255,.14);border-color:rgba(0,207,255,.55);
+color:var(--cy2);font-weight:600}
+.btnpdf{font-family:Inter,sans-serif;font-size:12px;background:transparent;color:var(--cy2);
+border:1px solid rgba(0,207,255,.45);border-radius:18px;padding:5px 13px;cursor:pointer;
+text-decoration:none;white-space:nowrap;display:inline-block}
+.btnpdf:hover{background:rgba(0,207,255,.12)}
+.btnpdf[disabled]{opacity:.5;cursor:wait}
+tr.abre{cursor:pointer}
+tr.abre:hover{background:rgba(0,207,255,.06)}
+.seta{display:inline-block;width:14px;color:var(--cy2);transition:transform .15s;font-size:11px}
+tr.aberto .seta{transform:rotate(90deg)}
+tr.det td{background:#0A1119;padding:12px 16px 14px 34px}
+.det-l{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:#9FB0BF}
+.det-l span b{color:var(--tx);font-weight:600}
+.btnpng{font-family:Inter,sans-serif;font-size:12px;background:transparent;color:#9B8CFF;
+border:1px solid rgba(155,140,255,.5);border-radius:18px;padding:5px 13px;cursor:pointer;
+text-decoration:none;white-space:nowrap;display:inline-block}
+.btnpng:hover{background:rgba(155,140,255,.14)}
+.btnpng[disabled]{opacity:.5;cursor:wait}
+.modo .btnpng{font-size:13px;padding:8px 18px;border-radius:22px}
+.modo .btnpdf{margin-left:auto;font-size:13px;padding:8px 18px;border-radius:22px;
+background:transparent;color:var(--cy2);border:1px solid rgba(0,207,255,.45)}
+.ap h2{font-size:19px;font-weight:800;font-family:Montserrat,sans-serif;margin:26px 0 4px}
+.ap .lead{font-size:13px;color:var(--mut);margin-bottom:14px}
+.dp{background:linear-gradient(155deg,#0C1826,#0A1119);border:1px solid var(--line);
+border-radius:11px;padding:17px 19px;margin-bottom:13px}
+.dp-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+flex-wrap:wrap;padding-bottom:11px;margin-bottom:12px;border-bottom:1px solid var(--line)}
+.dp-h h3{font-size:17px;font-weight:700;font-family:Montserrat,sans-serif}
+.dp-num{display:flex;gap:20px;flex-wrap:wrap}
+.dp-num div{text-align:center}
+.dp-num b{font-family:Montserrat,sans-serif;font-size:21px;font-weight:800;display:block;
+line-height:1;color:var(--cy2)}
+.dp-num span{font-size:10px;font-family:ui-monospace,monospace;color:var(--mut);
+letter-spacing:.06em;text-transform:uppercase}
+.tt{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ff{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.ff div{flex:1 1 300px;border-radius:8px;padding:11px 14px;font-size:12.8px;color:#9FB0BF}
+.ff .forte{background:rgba(61,214,140,.07);border-left:3px solid var(--grn)}
+.ff .fraco{background:rgba(255,92,92,.07);border-left:3px solid var(--red)}
+.ff h6{font-family:ui-monospace,monospace;font-size:9.5px;letter-spacing:.1em;
+text-transform:uppercase;margin-bottom:5px}
+.ff .forte h6{color:var(--grn)} .ff .fraco h6{color:var(--red)}
+.fo{background:rgba(0,207,255,.05);border-left:3px solid var(--cy);border-radius:8px;
+padding:12px 15px}
+.fo h6{font-family:ui-monospace,monospace;font-size:9.5px;letter-spacing:.1em;
+text-transform:uppercase;color:var(--cy2);margin-bottom:7px}
+.fo ul{margin-left:16px;font-size:12.8px;color:#9FB0BF}
+.fo li{margin-bottom:4px}
+.nm{font-size:12.3px;color:#9FB0BF;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+.nm b{color:var(--tx)}
+.foco{background:linear-gradient(160deg,#0C1826,#0A1119);border:1px solid rgba(0,207,255,.3);
+border-radius:12px;padding:22px 24px;margin-bottom:18px}
+.foco h3{font-family:Montserrat,sans-serif;font-size:19px;font-weight:800;margin-bottom:3px}
+.foco h3 em{font-style:normal;color:var(--cy)}
+.foco>.sub{font-size:12.5px;color:var(--mut);margin-bottom:16px}
+.fd{background:#0A1119;border-radius:10px;padding:15px 17px;margin-bottom:11px;
+border-left:3px solid var(--cy)}
+.fd h4{font-size:15.5px;font-weight:700;margin-bottom:3px;font-family:Montserrat,sans-serif}
+.fd .cx{font-family:ui-monospace,monospace;font-size:11px;color:var(--mut);margin-bottom:9px}
+.fd ul{margin:0;list-style:none}
+.fd li{font-size:13.3px;color:#9FB0BF;padding:5px 0 5px 15px;position:relative}
+.fd li:before{content:"";position:absolute;left:0;top:11px;width:6px;height:6px;border-radius:50%}
+.fd li.meta:before{background:var(--cy)} .fd li.trava:before{background:var(--red)}
+.fd li.gargalo:before{background:var(--amb)}
+.fd .risco{margin-top:9px;padding-top:9px;border-top:1px solid var(--line);
+font-size:12.5px;color:var(--amb)}
+.acomp td{padding:9px 11px;font-size:12.8px}
+.acomp .ind{color:var(--tx);font-weight:600}
+.one h3{font-family:Montserrat,sans-serif;font-size:18px;font-weight:800;margin-bottom:3px}
+.one h3 em{font-style:normal;color:var(--cy)}
+.one .sub{font-size:12.5px;color:var(--mut);margin-bottom:16px}
+.orow{display:flex;gap:14px;padding:12px 0;border-top:1px solid var(--line);align-items:flex-start}
+.orow:first-of-type{border-top:none;padding-top:4px}
+.orow .ot{min-width:190px;font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.09em;
+text-transform:uppercase;color:var(--cy3);padding-top:3px}
+.orow.trava .ot{color:var(--red)}.orow.gargalo .ot{color:var(--amb)}
+.orow.ok .ot{color:var(--grn)}.orow.meta .ot{color:var(--cy2)}
+.orow p{font-size:13.8px;color:#9FB0BF;flex:1}
+.orow p b{color:var(--tx)}
+@media(max-width:640px){.orow{flex-direction:column;gap:4px}.orow .ot{min-width:0}}
+.fsel{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.fsel button{font-family:Inter,sans-serif;font-size:12.5px;background:var(--card);color:#9FB0BF;
+border:1px solid var(--line);border-radius:20px;padding:6px 15px;cursor:pointer}
+.fsel button.on{background:rgba(0,207,255,.12);border-color:rgba(0,207,255,.5);color:var(--cy2);font-weight:600}
+.fwrap{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:20px}
+.fun{width:100%;height:auto;display:block}
+.fl{font-family:Inter,sans-serif;font-size:13px;fill:#E6EDF3}
+.fn{font-family:ui-monospace,monospace;font-size:15px;font-weight:700;fill:var(--cy2)}
+.fp{font-family:ui-monospace,monospace;font-size:11px;fill:#7A8A99}
+.fc{font-family:ui-monospace,monospace;font-size:11px;font-weight:700}
+</style></head><body>
+
+<div id="app"><div class="load">Carregando…</div></div>
+
+<script>
+const CORES = ['#00CFFF','#F2A93B','#3DD68C','#9B8CFF','#FF5C5C','#52CEF5'];
+
+google.script.run.withSuccessHandler(render).withFailureHandler(e=>{
+  document.getElementById('app').innerHTML =
+    '<div class="empty"><b>Erro ao carregar.</b><br>'+e.message+'</div>';
+}).getDados();
+
+function render(d){
+  window.__D=d;
+  document.getElementById('app').innerHTML = renderApresentacao(d);
+}
+
+/* ─────────── PDF por dupla ─────────── */
+
+function btnPdf(dupla){
+  return '<button class="btnpdf" data-dupla="'+String(dupla).replace(/"/g,'&quot;')+
+         '" onclick="pdfDupla(this)">📄 PDF da dupla</button>';
+}
+function pdfDupla(btn){ rodaPdf(btn,'gerarPdfDupla',btn.getAttribute('data-dupla')); }
+function pdfTodas(btn){ rodaPdf(btn,'gerarPdfTodas'); }
+function rodaPdf(btn,fn,arg){
+  const txt=btn.textContent; btn.disabled=true; btn.textContent='Gerando PDF…';
+  const run=google.script.run.withSuccessHandler(r=>{
+    const a=document.createElement('a');
+    a.href=r.url; a.target='_blank'; a.className='btnpdf';
+    a.textContent='Abrir PDF ↗'; a.title=r.nome;
+    btn.replaceWith(a);
+  }).withFailureHandler(e=>{
+    btn.disabled=false; btn.textContent=txt;
+    alert('Não consegui gerar o PDF: '+e.message);
+  });
+  if(arg===undefined) run[fn](); else run[fn](arg);
+}
+
+/* ─────────── Slides em PNG ─────────── */
+
+function btnPng(chave,rot){
+  return '<button class="btnpng" data-slide="'+String(chave).replace(/"/g,'&quot;')+
+         '" onclick="pngSlide(this)">🖼️ '+(rot||'PNG do slide')+'</button>';
+}
+function pngSlide(btn){
+  const chave=btn.getAttribute('data-slide');
+  const txt=btn.textContent; btn.disabled=true; btn.textContent='Desenhando…';
+  desenhaSlide(chave).then(b64=>{
+    btn.textContent='Salvando…';
+    google.script.run.withSuccessHandler(r=>{
+      const a=document.createElement('a');
+      a.href=r.url; a.target='_blank'; a.className='btnpng';
+      a.textContent='Abrir PNG ↗'; a.title=r.nome;
+      btn.replaceWith(a);
+    }).withFailureHandler(e=>{
+      btn.disabled=false; btn.textContent=txt;
+      alert('Não consegui salvar o PNG: '+e.message);
+    }).salvarPngSlide(b64, nomeSlide(chave));
+  }).catch(e=>{
+    btn.disabled=false; btn.textContent=txt;
+    alert('Não consegui desenhar o slide: '+(e&&e.message?e.message:e));
+  });
+}
+function pngTodos(btn){
+  const d=window.__D;
+  const lista=d.porDupla.map(p=>p.dupla).filter(x=>x!=='Sem dupla'&&x!=='QA').concat(['#ADM']);
+  const txt=btn.textContent; btn.disabled=true;
+  let i=0;
+  const passo=()=>{
+    if(i>=lista.length){
+      google.script.run.withSuccessHandler(r=>{
+        const a=document.createElement('a');
+        a.href=r.url; a.target='_blank'; a.className='btnpng';
+        a.textContent='Abrir pasta com os '+lista.length+' slides ↗';
+        btn.replaceWith(a);
+      }).withFailureHandler(()=>{ btn.disabled=false; btn.textContent=txt; }).pastaSlides();
+      return;
+    }
+    const chave=lista[i];
+    btn.textContent='Gerando '+(i+1)+' de '+lista.length+'…';
+    desenhaSlide(chave).then(b64=>{
+      google.script.run.withSuccessHandler(()=>{ i++; passo(); })
+        .withFailureHandler(e=>{ btn.disabled=false; btn.textContent=txt;
+          alert('Parou em '+chave+': '+e.message); })
+        .salvarPngSlide(b64, nomeSlide(chave));
+    }).catch(e=>{ btn.disabled=false; btn.textContent=txt;
+      alert('Parou em '+chave+': '+(e&&e.message?e.message:e)); });
+  };
+  passo();
+}
+function nomeSlide(chave){
+  const d=window.__D;
+  return 'Slide — '+(chave==='#ADM'?'ADM':chave)+' — '+d.data;
+}
+
+/** Monta o slide em 1920x1080 fora da tela e devolve o PNG em base64. */
+function desenhaSlide(chave){
+  const d=window.__D;
+  const html = chave==='#ADM' ? slideAdm(d) : slideDupla(d,chave);
+  let box=document.getElementById('slidebox');
+  if(!box){
+    box=document.createElement('div');
+    box.id='slidebox';
+    box.style.cssText='position:fixed;left:-20000px;top:0;width:1920px;height:1080px;'+
+      'overflow:hidden;z-index:-1';
+    document.body.appendChild(box);
+  }
+  box.innerHTML=html;
+  const alvo=box.firstElementChild;
+  // espera a fonte carregar, senão o html2canvas desenha com a fonte de sistema
+  const fontes = document.fonts ? document.fonts.ready : Promise.resolve();
+  return fontes.then(()=>html2canvas(alvo,{
+      width:1920,height:1080,scale:1,backgroundColor:'#060B14',
+      useCORS:true,logging:false
+    })).then(canvas=>{
+      const url=canvas.toDataURL('image/png');
+      box.innerHTML='';
+      return url.split(',')[1];
+    });
+}
+
+/** Casca do slide: cabeçalho, KPIs, blocos e rodapé. */
+function slideShell(titulo, kpis, blocos, rodape){
+  const S={
+    wrap:'width:1920px;height:1080px;box-sizing:border-box;padding:64px 72px;'+
+      'background:linear-gradient(160deg,#0A1322 0%,#060B14 60%);color:#E6EDF3;'+
+      'font-family:Inter,Arial,sans-serif;display:flex;flex-direction:column',
+    topo:'display:flex;align-items:flex-start;justify-content:space-between;gap:48px',
+    sup:'font-family:Inter,Arial,sans-serif;font-size:19px;font-weight:600;letter-spacing:.14em;'+
+      'text-transform:uppercase;color:#52CEF5;margin-bottom:10px',
+    tit:'font-family:Montserrat,Arial,sans-serif;font-size:62px;font-weight:800;'+
+      'letter-spacing:-.02em;line-height:1.02;margin:0',
+    kpis:'display:flex;gap:56px;padding-top:6px',
+    kv:'font-family:Montserrat,Arial,sans-serif;font-size:58px;font-weight:800;line-height:1',
+    kr:'font-size:17px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;'+
+      'color:#8699A8;margin-top:8px;text-align:center',
+    hr:'height:1px;background:#1D2A38;margin:40px 0 36px'
+  };
+  return '<div style="'+S.wrap+'">'+
+    '<div style="'+S.topo+'">'+
+      '<div><div style="'+S.sup+'">'+titulo.sup+'</div>'+
+       '<h1 style="'+S.tit+'">'+titulo.nome+'</h1></div>'+
+      '<div style="'+S.kpis+'">'+kpis.map(k=>
+        '<div style="text-align:center"><div style="'+S.kv+';color:'+(k.cor||'#00CFFF')+'">'+
+        k.v+'</div><div style="'+S.kr+'">'+k.rot+'</div></div>').join('')+'</div>'+
+    '</div>'+
+    '<div style="'+S.hr+'"></div>'+
+    blocos+
+    '<div style="margin-top:auto;padding-top:34px;border-top:1px solid #1D2A38;display:flex;'+
+      'justify-content:space-between;font-size:17px;color:#5B6B7A">'+
+      '<span>'+rodape.esq+'</span><span>'+rodape.dir+'</span></div>'+
+  '</div>';
+}
+
+/** Cartão colorido do slide. */
+function slideCard(cor, fundo, rot, corpo, flex){
+  return '<div style="flex:'+(flex||'1 1 0')+';min-width:0;background:'+fundo+';'+
+    'border:1px solid '+cor+'33;border-left:6px solid '+cor+';border-radius:14px;'+
+    'padding:28px 32px;box-sizing:border-box">'+
+    '<div style="font-size:17px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;'+
+    'color:'+cor+';margin-bottom:16px">'+rot+'</div>'+
+    '<div style="font-size:26px;line-height:1.45;color:#C9D6E2">'+corpo+'</div></div>';
+}
+
+function slideLista(itens){
+  return '<div>'+itens.map(t=>
+    '<div style="display:flex;gap:16px;margin-bottom:14px">'+
+    '<span style="color:#00CFFF;font-size:26px;line-height:1.4">•</span>'+
+    '<span style="flex:1">'+t+'</span></div>').join('')+'</div>';
+}
+
+function slideDupla(d,dupla){
+  const p=d.porDupla.filter(x=>x.dupla===dupla)[0]||{};
+  const ins=p.insights||[];
+  const forte=ins.filter(i=>i.t==='ok')[0];
+  const fraco=ins.filter(i=>i.t==='trava'||i.t==='gargalo')[0];
+  const prev=(d.previsao&&d.previsao.hoje?d.previsao.hoje.lista:[]).filter(c=>c.dupla===dupla);
+  const form=((d.motivoLista||{})['Aguardando formulário ou dados']||[]).filter(c=>c.dupla===dupla);
+  const ja={}; prev.forEach(c=>ja[c.id]=1); form.forEach(c=>ja[c.id]=1);
+  const fila=((d.motivoLista||{})['Fila interna — sem impedimento externo']||[])
+    .concat((d.motivoLista||{})['Pendente de ajuste interno']||[])
+    .filter(c=>c.dupla===dupla && !ja[c.id]).sort((a,b)=>(b.dias||0)-(a.dias||0));
+  const risco=(d.risco||[]).filter(c=>c.dupla===dupla);
+
+  const itens=[];
+  if(prev.length) itens.push('Ativar <b style="color:#E6EDF3">'+prev.length+'</b>: '+
+    prev.slice(0,6).map(c=>c.cliente).join(', ')+(prev.length>6?' +'+(prev.length-6):''));
+  if(form.length) itens.push('Cobrar formulário de <b style="color:#E6EDF3">'+form.length+'</b>: '+
+    form.slice(0,5).map(c=>c.cliente).join(', ')+(form.length>5?' +'+(form.length-5):''));
+  if(fila.length) itens.push('Destravar os mais parados: '+
+    fila.slice(0,5).map(c=>c.cliente+' ('+(c.dias||0)+'d)').join(', '));
+  const prox=(d.previsao&&d.previsao.hoje&&d.previsao.hoje.proxima?d.previsao.hoje.proxima:[])
+    .filter(c=>c.dupla===dupla);
+  if(prox.length) itens.push('Próxima semana, <b style="color:#E6EDF3">'+prox.length+
+    '</b> previstos: '+prox.slice(0,5).map(c=>c.cliente).join(', ')+
+    (prox.length>5?' +'+(prox.length-5):''));
+  if(risco.length) itens.push('<span style="color:#FF8A8A">Risco de saída: '+
+    risco.slice(0,4).map(c=>c.cliente+' ('+c.sinal.toLowerCase()+')').join(', ')+'</span>');
+  if(!itens.length) itens.push('Sem ação pendente nesta leitura.');
+
+  const blocos='<div style="display:flex;gap:28px;margin-bottom:28px">'+
+    slideCard('#3DD68C','rgba(61,214,140,.07)','Ponto forte',
+      forte?forte.txt:'Sem liderança com margem nesta leitura.')+
+    slideCard('#FF5C5C','rgba(255,92,92,.07)','Ponto de atenção',
+      fraco?fraco.txt:'Nenhuma trava concentrada.')+
+    '</div>'+
+    slideCard('#00CFFF','rgba(0,207,255,.05)','Foco da próxima semana',slideLista(itens),'1 1 100%');
+
+  return slideShell(
+    { sup:'As duplas', nome:dupla },
+    [ { v:p.emOnboarding||0, rot:'em onboarding' },
+      { v:p.quentes||0, rot:'prontos' },
+      { v:prev.length, rot:'previstos' },
+      { v:p.ativacoes||0, rot:'ativo', cor:'#3DD68C' } ],
+    blocos,
+    { esq:'Foto do Cockpit de '+d.data, dir:dupla });
+}
+
+function slideAdm(d){
+  const a=d.adm||{};
+  const pend=(a.listaPendentes||[]).slice(0,8);
+  const sem=(a.listaSemConcierge||[]).slice(0,6);
+  const contrato=(d.jornada.listaContrato||[]);
+
+  const corpoPend=pend.length
+    ? slideLista(pend.map(c=>c.cliente+' <b style="color:'+
+        ((c.dias||0)>=15?'#FF5C5C':(c.dias||0)>=7?'#F2A93B':'#C9D6E2')+'">'+
+        (c.dias!=null?c.dias+'d':'—')+'</b>'))
+    : 'Nenhum contrato aguardando assinatura.';
+  const corpoSem=sem.length
+    ? slideLista(sem.map(c=>c.cliente+(c.dias!=null?' <b style="color:#FF5C5C">'+c.dias+'d</b>':'')))
+    : 'Todo contrato assinado já tem Concierge responsável.';
+
+  const itens=[];
+  if(a.vencidos) itens.push('Cobrar os <b style="color:#E6EDF3">'+a.vencidos+
+    '</b> com SLA de assinatura vencido.');
+  if(a.semConcierge) itens.push('Delegar os <b style="color:#E6EDF3">'+a.semConcierge+
+    '</b> que assinaram e ninguém assumiu.');
+  if(contrato.length) itens.push('Destravar a entrada de '+
+    contrato.slice(0,5).map(c=>c.cliente).join(', ')+
+    (contrato.length>5?' +'+(contrato.length-5):'')+'.');
+  if(!itens.length) itens.push('Fila do ADM limpa nesta leitura.');
+
+  const blocos='<div style="display:flex;gap:28px;margin-bottom:28px">'+
+    slideCard('#F2A93B','rgba(242,169,59,.07)','Aguardando assinatura · por tempo de espera',corpoPend)+
+    slideCard('#FF5C5C','rgba(255,92,92,.07)','Assinaram e não foram delegados',corpoSem)+
+    '</div>'+
+    slideCard('#00CFFF','rgba(0,207,255,.05)','Foco da próxima semana',slideLista(itens),'1 1 100%');
+
+  return slideShell(
+    { sup:'ADM · antes do onboarding', nome:'Contratos' },
+    [ { v:d.jornada.aguardandoContrato||0, rot:'aguardando', cor:'#F2A93B' },
+      { v:a.pendentes||0, rot:'no pipe' },
+      { v:a.vencidos||0, rot:'SLA vencido', cor:(a.vencidos?'#FF5C5C':'#3DD68C') },
+      { v:(a.esperaMedia!=null?a.esperaMedia+'d':'—'), rot:'espera média' } ],
+    blocos,
+    { esq:'Foto do Cockpit de '+d.data, dir:'ADM — Contratos' });
+}
+
+function renderCompleto(d){
+  if(!d.data){
+    document.getElementById('app').innerHTML =
+      '<div class="empty"><b>Nenhum snapshot ainda.</b><br>'+
+      'Cole as pipelines nas abas <code>Colar_Concierge</code> e <code>Colar_Gestor</code>, '+
+      'depois rode <b>Painel Onboarding › 1 · Tirar snapshot de hoje</b>.</div>';
+    return;
+  }
+  let h = '';
+  h += '<div class="top"><h1>Onboarding — <em>acompanhamento semanal</em></h1>'+
+       '<span class="dt">Foto de '+d.data+' · '+d.datasDisponiveis.length+' snapshots'+
+       (d.intervalo?' · comparando com '+d.intervalo+' dia(s) atrás':'')+
+       (d.excluidos?' · '+d.excluidos+' cancelados fora da conta':'')+'</span></div>';
+
+  // ---- Snapshot desatualizado ----
+  if(d.idadeSnapshot!=null && d.idadeSnapshot>=1){
+    const cor = d.idadeSnapshot>=3 ? '#FF5C5C' : '#F2A93B';
+    h += '<div style="background:rgba(255,92,92,'+(d.idadeSnapshot>=3?'.10':'.05')+
+      ');border:1px solid '+cor+';border-left:3px solid '+cor+';border-radius:10px;'+
+      'padding:14px 18px;margin-bottom:16px">'+
+      '<div style="font-family:Montserrat,sans-serif;font-size:14px;font-weight:700;color:'+cor+'">'+
+      'Leitura de '+d.idadeSnapshot+' dia(s) atrás — foto de '+d.data+'</div>'+
+      '<p style="font-size:13px;color:#9FB0BF;margin-top:6px">Tudo abaixo reflete o Cockpit <b>naquele '+
+      'momento</b>. Tags trocadas depois disso não aparecem. Tire um snapshot novo antes de cobrar '+
+      'ou apresentar qualquer número.</p></div>';
+  }
+
+  // ---- Eventos de equipe: contexto antes dos números ----
+  if(d.eventos && d.eventos.length){
+    const rec=d.eventos.filter(e=>{
+      const dif=(new Date(d.data)-new Date(e.data))/864e5;
+      return dif>=0 && dif<=21;
+    });
+    if(rec.length){
+      h += '<div style="background:rgba(242,169,59,.07);border:1px solid rgba(242,169,59,.3);'+
+        'border-left:3px solid var(--amb);border-radius:10px;padding:15px 19px;margin-bottom:18px">'+
+        '<div style="font-family:Montserrat,sans-serif;font-size:14.5px;font-weight:700;color:var(--amb);'+
+        'margin-bottom:8px">Mudanças de equipe nas últimas 3 semanas</div>'+
+        '<ul style="margin-left:17px;font-size:13px;color:#9FB0BF">'+
+        rec.map(e=>'<li style="margin-bottom:3px"><span class="mut">'+e.data+'</span> · <b>'+
+          e.tipo+'</b> — '+e.quem+(e.descricao?': '+e.descricao:'')+'</li>').join('')+'</ul>'+
+        '<p style="font-size:12.5px;color:var(--mut);margin-top:9px;padding-top:9px;'+
+        'border-top:1px solid var(--line)">Com troca de carteira, os números por dupla comparam '+
+        '<b>pessoas diferentes</b> antes e depois. Movimento e estagnação sobem por transferência, '+
+        'não por desempenho — leia esta semana com essa ressalva.</p></div>';
+    }
+  }
+
+  // ---- Alarme de consistência ----
+  if(d.modelo && !d.modelo.consistente){
+    h += '<div style="background:rgba(255,92,92,.12);border:1px solid var(--red);'+
+         'border-left:4px solid var(--red);border-radius:10px;padding:16px 20px;margin-bottom:20px">'+
+         '<div style="font-family:Montserrat,sans-serif;font-size:15px;font-weight:700;color:#FF5C5C;'+
+         'margin-bottom:8px">⚠ Números inconsistentes — não use este painel</div>'+
+         '<p style="font-size:13px;color:#9FB0BF;margin-bottom:8px">Uma ou mais verificações internas '+
+         'falharam. Isso significa que algum total não fecha com suas partes.</p><ul style="margin-left:18px;'+
+         'font-size:12.5px;color:#9FB0BF">'+
+         d.modelo.invariantes.filter(i=>!i.ok).map(i=>'<li><b>'+i.nome+'</b> — '+i.det+'</li>').join('')+
+         '</ul></div>';
+  }
+
+  // ---- One page ----
+  if(d.resumo && d.resumo.length){
+    h += '<div class="one"><h3>Leitura da operação — <em>resumo</em></h3>'+
+         '<p class="sub">Gerado dos dados desta leitura · foto de '+d.data+
+         (d.modelo? (d.modelo.consistente
+            ? ' · <span style="color:#3DD68C">'+d.modelo.invariantes.length+' verificações internas OK</span>'
+            : ' · <span style="color:#FF5C5C">verificações falharam</span>') : '')+'</p>'+
+         d.resumo.map(r=>'<div class="orow '+(r.cor||'')+'"><span class="ot">'+r.tit+'</span>'+
+           '<p>'+r.txt+'</p></div>').join('')+'</div>';
+  }
+
+  // ---- KPIs em ordem de jornada ----
+  h += '<h2>A carteira de onboarding <span>quem ainda precisa ser implantado</span></h2>';
+  h += '<div class="one" style="padding:18px 22px;margin-bottom:16px">'+
+    '<div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">'+
+    '<b style="font-family:Montserrat,sans-serif;font-size:46px;font-weight:800;color:var(--cy);line-height:1">'+
+    d.jornada.emOnboarding+'</b>'+
+    '<div><div style="font-size:15px;color:var(--tx);font-weight:600">clientes em onboarding</div>'+
+    '<div style="font-size:12.5px;color:var(--mut)">Esta é a carteira de trabalho. '+
+    'Fora desta conta: '+d.jornada.ativados+' já ativados (IA ativa), '+d.jornada.aguardandoContrato+
+    ' aguardando contrato, '+d.totais.cancelados+' cancelados'+
+    ((d.totais.parceria||d.totais.teste)?' e '+((d.totais.parceria||0)+(d.totais.teste||0))+
+      ' de parceria ou teste interno, que não entram em nenhuma conta':'')+
+    '. Base total de '+d.jornada.total+
+    ', cancelados excluídos pelo '+d.fonteCancelamento+'.</div></div>'+
+    '</div></div>';
+  h += '<div class="kpis">'+
+    kpi(d.jornada.naoFizeramOnb,'1 · Antes da call de BM','Entrada até Imersão','')+
+    kpi(d.jornada.construcao,'2 · Agente em construção','Em criação da IA','')+
+    kpi(d.jornada.prontos,'3 · Prontos para ativar','Em Pré-Ativação — ainda não estão ativos','g')+
+  '</div>';
+
+  h += '<h3 style="font-size:14px;margin:20px 0 10px;color:#3DD68C">Já entregues — IA ativa</h3>';
+  h += '<div class="kpis">'+
+    kpi(d.jornada.ativados,'Total ativados','A IA está rodando no cliente','g')+
+    kpi(d.jornada.ativoValidacao,'Ativo','Em Ativação ou Validação 7 dias','g')+
+    kpi(d.jornada.ativoOngoing,'Ativo · Cliente em Ongoing','Concluiu a validação e passou para o CS','g')+
+  '</div>';
+  // ---- Ativações do mês ----
+  if(d.ativacoesMes){
+    const A=d.ativacoesMes;
+    h += '<h3 style="font-size:14px;margin:20px 0 10px;color:#3DD68C">Ativações de '+
+         A.rotulo+'</h3>';
+    h += '<div class="kpis">'+
+      kpi(A.total,'Ativaram neste mês','Entraram em Validação 7 dias em '+A.rotulo+
+          ' e estão com a tag Ativo','g')+
+      A.porDupla.map(x=>kpi(x.n,x.dupla,'Ativações da dupla no mês','')).join('')+
+      (A.ocultas?kpi(A.ocultas,'Duplas desfeitas',
+        A.nomesOcultos.join(' · ')+' — contam no total, não têm mais bloco','a'):'')+
+      '</div>';
+    if(A.lista.length){
+      h += '<table style="margin-top:10px"><thead><tr><th>Cliente</th><th>Dupla</th>'+
+           '<th>Entrou em Validação</th></tr></thead><tbody>'+
+        A.lista.map(c=>'<tr><td>'+c.cliente+' <span class="mut">#'+c.id+'</span></td>'+
+          '<td>'+c.dupla+'</td><td class="mut">'+c.data+'</td></tr>').join('')+
+        '</tbody></table>';
+    }
+    h += '<div class="como" style="margin-top:8px"><p>A data da ativação é o <b>primeiro '+
+      'snapshot em que o cliente apareceu em Validação 7 dias</b>. Passar de Validação para '+
+      'Ativo é ida para Ongoing e não conta aqui, então quem ativou em outro mês e só foi '+
+      'para Ongoing agora fica de fora.</p>'+
+      (A.semTag?'<p><b>'+A.semTag+'</b> entraram em Validação neste mês mas estão '+
+        '<b>sem a tag Ativo</b> no card. Marque a tag no Cockpit para eles entrarem.</p>':'')+
+      (A.semHistorico?'<p><b>'+A.semHistorico+'</b> já estavam em Validação ou Ativo na '+
+        'primeira leitura ('+A.desde+') e não têm data conhecida.</p>':'')+'</div>';
+  }
+
+  h += '<div class="como" style="margin-top:10px"><h4>Onde termina o onboarding</h4>'+
+       '<p>A IA <b>vai ao ar ao entrar em Validação 7 dias</b> — a partir daí o cliente está ativado '+
+       'e a entrega aconteceu. A etapa seguinte marca o fim do acompanhamento e a passagem para Ongoing.</p>'+
+       '<p>Por isso os dois são <b>Ativo</b>: os '+d.jornada.ativados+' já receberam a entrega. '+
+       'Os três níveis acima somam os '+d.jornada.emOnboarding+' que ainda não receberam.</p></div>';
+
+
+  // Dentro dos prontos: quantos realmente dá para ativar
+  if(d.plano){
+    const p=d.plano;
+    h += '<h3 style="font-size:14px;margin:18px 0 9px;color:#9FB0BF">Dentro dos '+
+         d.jornada.prontos+' prontos para ativar</h3>';
+    h += '<div class="kpis">'+
+      kpi(p.prontos.length,'Acionáveis','Sem impedimento e há menos de 60 dias na etapa','g')+
+      kpi(p.travados.length,'Com impedimento','Cliente não responde, BM, contrato ou plataforma legada','r')+
+      kpi(p.encalhados.length,'Encalhados','Mais de 60 dias na mesma etapa','a')+
+      '</div>';
+    const porImp={};
+    p.travados.forEach(c=>porImp[c.impedimento]=(porImp[c.impedimento]||0)+1);
+    const chaves=Object.keys(porImp).sort((a,b)=>porImp[b]-porImp[a]);
+    if(chaves.length)
+      h+='<div class="como" style="margin-top:9px"><p><b>Os impedimentos destes '+
+         p.travados.length+':</b> '+chaves.map(k=>k+' — <b>'+porImp[k]+'</b>').join(' · ')+'.</p>'+
+         '<p style="margin-top:6px">Atenção: os números de <b>O que está travando</b>, logo abaixo, '+
+         'valem para os '+d.jornada.emOnboarding+' da carteira inteira — não só para os prontos. '+
+         'Por isso são maiores.</p></div>';
+  }
+
+  h += '<h3 style="font-size:14px;margin:20px 0 10px;color:#9FB0BF">O que está travando</h3>';
+  h += '<div class="kpis">'+
+    kpi(d.totais.naoResponde,'Cliente não responde','Trava externa — não depende do time','a')+
+    kpi(d.totais.bm,'Problema na BM',
+        d.bm.length<=4 ? [...new Set(d.bm.map(c=>c.cliente))].join(' · ')
+                       : 'Trava técnica — lista abaixo','r')+
+    kpi(d.totais.semDono,'Sem responsável',
+        d.totais.semDono
+          ? (d.semResponsavel.length<=4
+              ? d.semResponsavel.map(c=>c.cliente+' #'+c.id).join(' · ')
+              : 'Já assinaram e ninguém assumiu')
+          : 'Nenhum cliente com contrato assinado sem dono',
+        d.totais.semDono?'r':'g')+
+    kpi(d.jornada.soGestor,'Sem card de Concierge',
+        d.soGestor.length && d.soGestor.length<=4
+          ? d.soGestor.map(c=>c.cliente+' #'+c.id).join(' · ')
+          : 'Sem jornada aberta no pipe do dono',
+        d.jornada.soGestor?'a':'g')+
+    kpi(d.totais.migracao,'Migrados da plataforma legada','Clientes vindos da plataforma antiga','')+
+    kpi(d.totais.cancelados,'Cancelados — não contam',
+        'Tinham card na esteira mas pediram cancelamento. Excluídos de todos os números '+
+        'pelo '+d.fonteCancelamento+'.',
+        d.fonteCancelamento==='status do sistema'?'':'a')+
+  '</div>';
+
+  h += '<div class="ato"><span class="ato-n">ATO 1</span><h2 class="ato-t">O funil da esteira</h2><p>Onde a carteira perde gente entre um nível e o outro</p></div>';
+  // ---- Funil de conversão ----
+  h += '<h2>Funil de conversão <span>quantos clientes já chegaram em cada nível</span></h2>';
+  h += '<div class="como"><h4>Como ler</h4>'+
+    '<p>Cada faixa traz <b>dois números</b>. O de cima, em azul, é quantos clientes <b>já passaram</b> '+
+    'por aquele nível — por isso sempre diminui: é um funil. O de baixo é quantos <b>estão ali agora</b>, '+
+    'e aparece também como a barrinha dentro da faixa.</p>'+
+    '<p>Nas etapas do meio esse número é <span class="tw">âmbar</span>, porque parado ali é travamento. '+
+    'No último nível ele é <span class="tg">verde</span>: quem está em <b>Onboarding finalizado</b> não está '+
+    'parado, <b>chegou</b>. Essa faixa cheia é o objetivo da esteira.</p>'+
+    '<p>Exemplo: no topo, todos os clientes da carteira já entraram na esteira — mas só uma parte '+
+    'continua na etapa de Entrada. Os dois números somados por nível reconstroem a carteira inteira.</p>'+
+    '<p>A <b>seta entre as faixas</b> é a conversão: de quem chegou no nível de cima, quantos avançaram. '+
+    'O número em vermelho é quanto ficou pelo caminho.</p>'+
+    '<span class="reg"><b>Na prática:</b> a menor conversão da lista é o gargalo real da esteira. '+
+    'Compare a mesma passagem entre duplas — se uma converte 80% de Onboarding para Criação e outra 40%, '+
+    'o problema está no processo daquela dupla, não no volume.</span></div>';
+  const fduplas=Object.keys(d.funil.porDupla).sort();
+  h += '<div class="fsel">'+
+       '<button class="on" onclick="mudaFunil(this,\'#global\')">Global</button>'+
+       fduplas.map(k=>'<button onclick="mudaFunil(this,\''+k.replace(/'/g,"")+'\')">'+k+'</button>').join('')+
+       '</div><div class="fwrap" id="funilbox">'+funil(d.funil.global)+'</div>'+
+       '<div id="funilins">'+insFunil('#global')+'</div>'+ compFunil(d.funil);
+  window.__FUNIL=d.funil;
+
+  h += '<div class="ato"><span class="ato-n">ATO 2</span><h2 class="ato-t">ADM — antes do onboarding</h2><p>Contratos e o que ainda não entrou na esteira</p></div>';
+  // ---- ADM: contratos ----
+  h += '<h2>ADM — contratos <span>fila anterior ao onboarding</span></h2>';
+  h += '<div class="como"><p>Estes clientes <b>ainda não assinaram</b>. Não entram na carteira de '+
+       'onboarding porque a implantação não pode começar — a bola está com o ADM. '+
+       'Separá-los evita cobrar do time de implantação um número que não depende dele.</p></div>';
+  h += '<div class="kpis" style="margin-bottom:12px">'+
+    kpi(d.jornada.aguardandoContrato,'Aguardando assinatura','Fila do ADM',
+        d.jornada.aguardandoContrato?'a':'g')+
+    (d.adm.total?kpi(d.adm.pendentes,'Pendentes no pipe de Contratos','Enviados, aguardando o cliente','a'):'')+
+    (d.adm.total?kpi(d.adm.vencidos,'Com SLA vencido','Passaram do prazo de assinatura',
+        d.adm.vencidos?'r':'g'):'')+
+    (d.adm.total?kpi(d.adm.esperaMedia!=null?d.adm.esperaMedia+'d':'—','Espera média',
+        'Dias parados aguardando assinatura','a'):'')+
+    (d.adm.total?kpi(d.adm.assinados,'Assinados','Já viraram cliente','g'):'')+
+    (d.adm.total?kpi(d.adm.semConcierge,'Assinados sem Concierge','Assinaram e ninguém assumiu',
+        d.adm.semConcierge?'r':'g'):'')+
+    '</div>';
+  if(d.jornada.listaContrato.length){
+    h += '<table><thead><tr><th>Cliente</th><th>Dupla</th><th>Etapa onde parou</th>'+
+         '<th style="text-align:right">Dias</th></tr></thead><tbody>'+
+         d.jornada.listaContrato.map(c=>'<tr><td>'+c.cliente+' <span class="mut">#'+c.id+'</span></td>'+
+           '<td>'+c.dupla+'</td><td>'+c.etapa+'</td>'+
+           '<td class="n">'+(c.dias!=null&&c.dias!==''?c.dias+'d':'—')+'</td></tr>').join('')+
+         '</tbody></table>';
+  }
+
+  if(d.adm.total){
+    h += '<div class="kpis">'+
+      kpi(d.adm.total,'Total no pipe','Conferência + pendentes + assinados','')+
+      kpi(d.adm.conferencia,'Em conferência','Antes de enviar para assinatura','')+
+      kpi(d.adm.pendentes,'Pendentes de assinatura','Enviados, aguardando o cliente','a')+
+      kpi(d.adm.assinados,'Assinados','Já viraram cliente','g')+
+      kpi(d.adm.esperaMedia!=null?d.adm.esperaMedia+'d':'—','Espera média dos pendentes',
+          'Dias parados aguardando assinatura','a')+
+      kpi(d.adm.semConcierge,'Assinados sem Concierge','Assinaram e ninguém assumiu',
+          d.adm.semConcierge?'r':'g')+
+      '</div>';
+    if(d.adm.listaPendentes.length){
+      h += '<h3 style="font-size:14px;margin:16px 0 8px;color:#9FB0BF">Pendentes de assinatura — por tempo de espera</h3>';
+      h += '<table><thead><tr><th>Cliente</th><th style="text-align:right">Dias aguardando</th>'+
+           '<th>Motivo registrado (tags)</th></tr></thead><tbody>';
+      d.adm.listaPendentes.forEach(c=>{
+        h+='<tr><td>'+c.cliente+' <span class="mut">#'+c.id+'</span></td>'+
+           '<td class="n '+((c.dias||0)>=15?'tr':(c.dias||0)>=7?'tw':'')+'">'+
+           (c.dias!=null?c.dias+'d':'—')+'</td>'+
+           '<td>'+(c.tags?c.tags.split(' | ').map(t=>'<span class="tag">'+t+'</span>').join(' '):
+                   '<span class="mut">sem motivo registrado</span>')+'</td></tr>';
+      });
+      h+='</tbody></table>';
+      h+='<div class="como" style="margin-top:10px"><p><b>Motivo da espera:</b> o Cockpit não tem campo próprio '+
+         'para isso. Quem aparece "sem motivo registrado" é contrato parado sem explicação. '+
+         'Criando tags no pipe de Contratos (ex: <b>Aguardando jurídico</b>, <b>Dado incorreto</b>, '+
+         '<b>Cliente sumiu</b>), a coluna passa a se preencher sozinha.</p></div>';
+    }
+    if(d.adm.listaSemConcierge.length){
+      h += '<h3 style="font-size:14px;margin:16px 0 8px;color:#FF5C5C">Assinaram e não foram delegados</h3>';
+      h += lista(d.adm.listaSemConcierge,[],'');
+    }
+  }
+
+  h += '<div class="ato"><span class="ato-n">ATO 3</span><h2 class="ato-t">Onboarding — a carteira em implantação</h2><p>Onde cada cliente está e o que trava</p></div>';
+  // ---- Progresso do onboarding ----
+  h += '<h2>Progresso da esteira <span>mesma base da seção acima · '+d.jornada.total+' clientes</span></h2>';
+  h += '<table><thead><tr><th>Nível da jornada</th>'+
+       '<th style="text-align:right">Já passaram</th><th style="text-align:right">Estão aqui</th>'+
+       '<th style="width:34%">Proporção</th></tr></thead><tbody>';
+  const CJ=['#FF5C5C','#F2A93B','#52CEF5','#00CFFF','#9B8CFF','#3DD68C'];
+  d.jornada.porNivel.forEach((n,i)=>{
+    const pc=Math.round(n.aqui/d.jornada.total*100);
+    h+='<tr><td><b>'+(i+1)+' · '+n.rot+'</b></td>'+
+       '<td class="n hi">'+n.chegaram+'</td>'+
+       '<td class="n" style="color:'+CJ[i]+'">'+(n.aqui||'·')+'</td>'+
+       '<td><div class="bar"><span style="width:'+pc+'%;background:'+CJ[i]+'">'+
+       (pc>=8?n.aqui:'')+'</span></div></td></tr>';
+  });
+  h+='</tbody></table>';
+  h += '<div class="como" style="margin-top:8px"><p><b>Já passaram</b> é cumulativo — inclui quem '+
+       'seguiu adiante. <b>Estão aqui</b> é onde o cliente se encontra agora, e a soma dessa coluna '+
+       'é a carteira inteira ('+d.jornada.total+').</p></div>';
+  h += '<div class="kpis" style="margin-top:12px">'+
+    kpi(d.carteiraTempo.confiavel?d.carteiraTempo.media+'d':'—','Tempo médio na carteira',
+        d.carteiraTempo.confiavel?'Desde a entrada no pipe'
+          :'Ainda não mensurável — '+d.carteiraTempo.parcial+' de '+d.carteiraTempo.total+
+           ' entraram antes do 1º snapshot ('+d.carteiraTempo.janela+'d de histórico)','a')+
+    kpi(d.listaCancelados?d.listaCancelados.onboarding.length:0,'Cancelaram no onboarding',
+        'Depois da call e antes da entrega — lista abaixo',
+        (d.listaCancelados&&d.listaCancelados.onboarding.length)?'r':'g')+
+    kpi(d.prog.retencao,'Em retenção','Tag Cliente de retenção','a')+
+    '</div>';
+
+  // ---- Motivos de espera ----
+  h += '<h2>Por que os clientes estão parados <span>classificação automática por tag, etapa e tarefas</span></h2>';
+  h += '<div class="como"><h4>Como o motivo é definido</h4>'+
+    '<p>Cada cliente recebe <b>um único motivo</b>, pela regra de prioridade: cancelamento → contrato → '+
+    'problema na BM → cliente não responde → migração → falta formulário → fila interna.</p>'+
+    '<span class="reg"><b>Na prática:</b> <b>Fila interna</b> é o único motivo que depende só de nós — '+
+    'é cliente sem nenhum impedimento externo que mesmo assim não andou. Esse número é o que a Diretoria '+
+    'deve cobrar do time. Os outros exigem ação de terceiros e precisam de cadência de cobrança, não de esforço.</span></div>';
+  const totM = Object.keys(d.motivos).reduce((a,k)=>a+d.motivos[k],0);
+  const CORM = {'Cancelamento em andamento':'#FF5C5C','Contrato não assinado':'#F2A93B',
+    'Problema na BM':'#FF5C5C','Cliente não responde':'#F2A93B','Pendência de migração':'#9B8CFF',
+    'Aguardando formulário ou dados':'#F2A93B','Fila interna — sem impedimento externo':'#FF5C5C',
+    'Em andamento normal':'#3DD68C'};
+  h += '<table><thead><tr><th>Motivo</th><th style="text-align:right">Clientes</th>'+
+       '<th style="text-align:right">% da carteira</th><th style="width:38%">Peso</th></tr></thead><tbody>';
+  Object.keys(d.motivos).sort((a,b)=>d.motivos[b]-d.motivos[a]).forEach(k=>{
+    const v=d.motivos[k], pc=Math.round(v/totM*100);
+    h+='<tr><td>'+k+'</td><td class="n hi">'+v+'</td><td class="n">'+pc+'%</td>'+
+       '<td><div class="bar"><span style="width:'+pc+'%;background:'+(CORM[k]||'#52CEF5')+'"></span></div></td></tr>';
+  });
+  h+='</tbody></table>';
+
+  // ---- Retrocessos ----
+  if(d.retrocessos.length){
+    h += '<h2>Voltaram de etapa <span>'+d.retrocessos.length+' ocorrências — correções e reprovações</span></h2>';
+    h += '<div class="como"><p>Cliente que <b>andou para trás</b> no funil. Quando vem de '+
+      '<b>Validação</b>, é reprovação: o agente foi testado e não passou. Nas outras etapas é correção ou retomada.</p>'+
+      '<span class="reg"><b>Na prática:</b> retrocesso a partir de Validação é o melhor indicador de '+
+      'qualidade de construção que temos. Se subir, o problema está na criação do agente, não no atendimento.</span></div>';
+    h += '<table><thead><tr><th>Cliente</th><th>De</th><th>Para</th><th>Dupla</th><th>Quando</th><th>Tipo</th></tr></thead><tbody>';
+    d.retrocessos.slice(0,30).forEach(r=>{
+      h+='<tr><td>'+r.cliente+' <span class="mut">#'+r.id+'</span></td><td>'+r.de+'</td>'+
+         '<td>'+r.para+'</td><td>'+r.dupla+'</td><td class="mut">'+r.semana+'</td>'+
+         '<td>'+(r.validacao?'<span class="tr">Reprovado na validação</span>':'Correção')+'</td></tr>';
+    });
+    h+='</tbody></table>';
+  }
+
+  // Tag aplicada em só um dos pipes
+  if(d.tagInconsistente && d.tagInconsistente.length){
+    h += '<h2>Tag de cancelamento em só um dos pipes <span>'+d.tagInconsistente.length+
+         ' card(s)</span></h2>';
+    h += '<div class="como"><p>O cliente está marcado como <b>cancelado em um pipe e ativo no outro</b>. '+
+         'O dashboard trata como cancelado nos dois, para não contar cliente fantasma — '+
+         'mas vale igualar a tag no Cockpit.</p></div>';
+    h += '<table><thead><tr><th>Cliente</th><th>Pipe ainda sem a tag</th></tr></thead><tbody>'+
+         d.tagInconsistente.map(c=>'<tr><td>'+c.cliente+' <span class="mut">#'+c.id+
+           '</span></td><td>'+c.pipe+'</td></tr>').join('')+'</tbody></table>';
+  }
+
+  // Sem responsável — ação imediata
+  if(d.semResponsavel.length){
+    h += '<h2>Sem responsável <span>'+d.semResponsavel.length+' clientes esperando atribuição</span></h2>';
+    h += '<div class="como"><h4>O que é</h4>'+
+      '<p>Clientes que <b>já assinaram contrato</b> e estão sem ninguém atribuído no card. '+
+      'Quem ainda está em fase de assinatura não entra aqui — aqueles aparecem na seção '+
+      '<b>Aguardando assinatura de contrato</b>, mais abaixo.</p>'+
+      '<span class="reg"><b>Na prática:</b> esta lista deveria estar sempre vazia. '+
+      'Cada linha é um cliente com contrato assinado e o relógio correndo sem ninguém do outro lado. '+
+      'Atribua no Cockpit e o número zera na próxima leitura.</span></div>';
+    h += '<table><thead><tr><th>Cliente</th><th>Pipe</th><th>Etapa</th>'+
+         '<th style="text-align:right">Dias na etapa</th><th>Tags</th></tr></thead><tbody>';
+    d.semResponsavel.forEach(c=>{
+      const al=(c.dias||0)>=30;
+      h+='<tr><td>'+c.cliente+' <span class="mut">#'+c.id+'</span></td>'+
+         '<td>'+c.pipe+'</td><td>'+c.etapa+'</td>'+
+         '<td class="n '+(al?'tr':'')+'">'+(c.dias!=null?c.dias+'d':'—')+'</td>'+
+         '<td>'+(c.tags?c.tags.split(' | ').map(t=>'<span class="tag">'+t+'</span>').join(' '):'')+'</td></tr>';
+    });
+    h+='</tbody></table>';
+  }
+
+  h += '<div class="ato"><span class="ato-n">ATO 4</span><h2 class="ato-t">As duplas</h2><p>Carteira, ritmo e leitura individual de cada uma</p></div>';
+  // ---- Blocos por dupla, com insights ----
+  d.porDupla.forEach(p=>{
+    h += '<div class="pb"><div class="pb-h"><div class="tt"><h3>'+p.dupla+'</h3>'+
+         (p.dupla!=='Sem dupla'&&p.dupla!=='QA'?btnPdf(p.dupla)+btnPng(p.dupla):'')+'</div>'+
+         '<span class="pb-t">'+p.carteiraC+' Concierge · '+p.carteiraG+' Gestor de IA</span></div>'+
+         '<div class="kpis">'+
+         kpi(p.emOnboarding,'Em onboarding','Ainda não chegaram em Ativo','')+
+         kpi(p.quentes,'Prontos para ativar','Em Pré-Ativação','g')+
+         kpi(j5(d,p.dupla,'nOnb'),'Onboardings em '+j5d(d)+' dias','Entraram em construção','')+
+         kpi(j5(d,p.dupla,'nValid'),'Foram para Validação em '+j5d(d)+' dias',
+             'A IA ficou ativa','g')+
+         kpi(j5(d,p.dupla,'nOngoing'),'Concluíram para Ongoing em '+j5d(d)+' dias',
+             'Terminaram os 7 dias de validação','g')+
+         kpi(p.parados||'—','Sem movimento','Mesma etapa entre os dois snapshots','a')+
+         kpi(p.cobertura!=null?p.cobertura:'—','Semanas de combustível',
+             d.intervalo>=5?'Prontos ÷ ritmo semanal':'Estimativa fraca — intervalo de '+d.intervalo+'d','a')+
+         (d.prev[p.dupla]&&d.prev[p.dupla].confiavel
+            ? kpi(d.prev[p.dupla].piso+'–'+d.prev[p.dupla].teto,'Previsão próxima semana',
+                  'Média '+d.prev[p.dupla].media+' · variação '+d.prev[p.dupla].cv+'%','')
+            : '')+
+         '</div>'+ equacao(p) + listaJanela(d,p.dupla) + movimento(d.movimento[p.dupla]) +
+         insights(p) + listasAcao(d,p.dupla) + '</div>';
+  });
+
+  // ---- Carteira por responsável ----
+  h += '<h2>Carteira por responsável <span>onde cada cliente está hoje</span></h2>';
+  h += matriz('Concierge', d.etapasC, d.carteira, d.totais.concierge);
+  h += '<div style="height:14px"></div>';
+  h += matriz('Gestor de IA', d.etapasG, d.carteiraG, d.totais.gestor);
+
+  // ---- Previsibilidade e curvas ----
+  const chaves = Object.keys(d.prev).sort();
+  if(d.semanas.length){
+    h += '<h2>Previsibilidade <span>ativações = ficou ativo (entrada em Validação), últimas 5 comparações</span></h2>';
+    h += '<table><thead><tr><th>Responsável</th><th>Semana a semana</th>'+
+         '<th style="text-align:right">Média</th><th style="text-align:right">Faixa</th>'+
+         '<th style="text-align:right">Variação</th></tr></thead><tbody>';
+    chaves.concat(['#geral']).forEach(k=>{
+      const geral = k==='#geral', p = geral ? d.prevGeral : d.prev[k];
+      if(!p) return;
+      h += '<tr'+(geral?' style="background:rgba(0,207,255,.05)"':'')+'>'+
+        '<td>'+(geral?'<b>Geral</b>':k)+'</td>'+
+        '<td class="mut" style="font-family:ui-monospace,monospace">'+p.serie.join(' · ')+'</td>'+
+        '<td class="n hi">'+p.media+'</td>'+
+        '<td class="n">'+p.piso+' a '+p.teto+'</td>'+
+        '<td class="n '+(p.cv>30?'tw':'tg')+'">'+p.cv+'%</td></tr>';
+    });
+    h += '</tbody></table>';
+
+    h += '<h2>Curva de entrega <span>global e por dupla</span></h2><div class="two">';
+    h += '<div>'+linhas(d,'ativacoes','Ativações por semana — ficaram ativos')+'</div>';
+    h += '<div>'+linhas(d,'onb','Onboardings por semana')+'</div>';
+    h += '</div>';
+    h += curvaIns(d.curvaAtiv,'A curva de ativações') + curvaIns(d.curvaOnb,'A curva de onboardings');
+    h += '<div style="height:14px"></div>';
+    h += '<h3 style="font-size:14px;margin-bottom:8px;color:#9FB0BF">Entrada contra saída — a esteira é sustentável?</h3>';
+    h += entradaSaida(d);
+    if(d.sustentavel) h += '<div class="ins" style="border-top:none;padding-top:0;margin-top:12px">'+
+      '<div class="ic '+d.sustentavel.cor+'" style="flex:1 1 100%"><h5>Leitura estratégica</h5>'+
+      '<p>'+d.sustentavel.txt+'</p></div></div>';
+  }
+
+  h += '<div class="ato"><span class="ato-n">ATO 5</span><h2 class="ato-t">O planejamento da semana</h2><p>Quem está marcado para ativar e como foi a semana</p></div>';
+  // ---- Previsto x realizado ----
+  if(d.previsao){
+    const P=d.previsao;
+    // ---- SEMPRE: quem está marcado agora ----
+    const H=P.hoje||{lista:[],total:0,porDupla:[]};
+    // ---- Foco e planejamento da semana ----
+    if(d.foco){
+      const F=d.foco;
+      h += '<div class="foco"><h3>Foco da semana — <em>o que fazer e o que acompanhar</em></h3>'+
+           '<p class="sub">Construído a partir desta leitura · '+
+           (F.totalMarcado?F.totalMarcado+' clientes marcados':'nenhum cliente marcado')+
+           (F.ritmo?' · ritmo histórico de '+F.ritmo+' por semana':'')+'</p>';
+
+      if(F.geral.length){
+        h += '<div style="margin-bottom:16px">'+
+          F.geral.map(g=>'<div class="ic '+(g.cor||'meta')+'" style="margin-bottom:9px">'+
+            '<h5>'+g.tit+'</h5><p>'+g.txt+'</p></div>').join('')+'</div>';
+      }
+
+      if(F.duplas.length){
+        h += '<h4 style="font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.2em;'+
+             'text-transform:uppercase;color:var(--cy3);margin:16px 0 9px">Cada dupla</h4>';
+        F.duplas.forEach(x=>{
+          h += '<div class="fd"><div class="tt" style="justify-content:space-between"><h4>'+x.dupla+'</h4>'+
+               btnPdf(x.dupla)+'</div>'+
+               '<div class="cx">'+x.marcados+' marcados · '+x.prontos+' prontos na etapa · '+
+               x.onboarding+' em onboarding</div><ul>'+
+               x.acoes.map(a=>'<li class="'+a.tipo+'">'+a.txt+'</li>').join('')+'</ul>'+
+               (x.risco?'<div class="risco">⚠ '+x.risco+'</div>':'')+'</div>';
+        });
+      }
+
+      if(F.acompanhar.length){
+        h += '<h4 style="font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.2em;'+
+             'text-transform:uppercase;color:var(--cy3);margin:16px 0 9px">O que acompanhar</h4>';
+        h += '<div class="kpis">'+F.acompanhar.map(a=>
+               kpi(a.hoje,a.ind,'alvo: '+a.alvo,'')).join('')+'</div>';
+      }
+      h += '</div>';
+    }
+
+    h += '<h2>Previstos para ativar <span>com a tag na foto de '+(H.data||P.semanaAte)+'</span></h2>';
+    if(!H.total){
+      h += '<div class="empty">Nenhum cliente com a tag de previsão neste snapshot. '+
+           'Se o time já marcou no Cockpit, tire uma leitura nova — o painel lê o snapshot, '+
+           'não o Cockpit ao vivo.</div>';
+    } else {
+      h += '<div class="kpis" style="margin-bottom:12px">'+
+        kpi(H.total,'Planejados para ativar','Total marcado com a tag nesta semana','g')+
+        H.porDupla.map(x=>kpi(x.total,x.dupla,'Planejados pela dupla','')).join('')+
+        '</div>';
+      h += '<table><thead><tr><th>Cliente</th><th>Dupla</th><th>Etapa</th><th>Situação</th>'+
+           '<th>Tags no snapshot</th></tr></thead><tbody>'+
+        H.lista.map(c=>'<tr><td>'+c.cliente+' <span class="mut">#'+c.id+'</span></td>'+
+          '<td>'+c.dupla+'</td><td>'+c.etapa+'</td><td>'+
+          (c.jaAtivo?'<span class="tg">já ativou</span>'
+           :c.pendente?'<span class="tr">travado pelo cliente</span>'
+           :'<span class="tw">a ativar</span>')+'</td>'+
+          '<td class="mut" style="font-size:11.5px">'+(c.tags||'')+'</td></tr>').join('')+'</tbody></table>'+
+        '<div class="como" style="margin-top:8px"><p>A coluna <b>Tags no snapshot</b> mostra o que o '+
+        'card tinha <b>no momento da leitura</b>. Se o time trocou a tag depois, é preciso um '+
+        'snapshot novo para o painel enxergar.</p></div>';
+      if(H.porDupla.length)
+        h += '<div class="como" style="margin-top:8px"><p><b>Por dupla:</b> '+
+             H.porDupla.map(d=>d.dupla+' — <b>'+d.total+'</b>'+
+               (d.ativos?' ('+d.ativos+' já ativaram)':'')).join(' · ')+'</p></div>';
+    }
+
+    // Planejamento da semana que vem
+    const PX=H.proxima||[];
+    h += '<h2>Previstos para a próxima semana <span>tag antiga · no padrão novo tudo vira Go-live</span></h2>';
+    if(!PX.length){
+      h += '<div class="empty">Ninguém marcado para a próxima semana ainda. Marque a tag '+
+           '<b>Ativação prevista próxima semana</b>, que no padrão novo foi consolidada em <b>Go-live</b>, '+
+           'com a data na nota. Quem estiver com Go-live entra direto em Previstos para ativar, acima.</div>';
+    } else {
+      h += '<div class="kpis" style="margin-bottom:12px">'+
+        kpi(PX.length,'Planejados para a próxima semana','Ainda não contam na meta desta','')+
+        (H.porDuplaProxima||[]).map(x=>kpi(x.total,x.dupla,'Planejados pela dupla','')).join('')+
+        '</div>';
+      h += '<table><thead><tr><th>Cliente</th><th>Dupla</th><th>Etapa hoje</th></tr></thead><tbody>'+
+        PX.map(c=>'<tr><td>'+c.cliente+' <span class="mut">#'+c.id+(c.tipo?' · '+c.tipo:'')+
+          '</span></td><td>'+c.dupla+'</td><td>'+c.etapa+'</td></tr>').join('')+'</tbody></table>';
+    }
+
+    // Como foi a semana — só o que a lista acima não mostra
+    if(!P.semBase && (P.cumpridos.length || P.travados.length || P.surpresas.length || P.perdidos.length)){
+      h += '<h3 style="font-size:14px;margin:20px 0 9px;color:#9FB0BF">Como foi a semana '+
+           '<span class="mut" style="font-weight:400">· comparando com '+P.semanaDe+'</span></h3>';
+      h += '<div class="kpis" style="margin-bottom:12px">'+
+        kpi(P.cumpridos.length,'Previstos que ativaram','Da lista acima','g')+
+        kpi(P.travados.length,'Travados pelo cliente','Marcados como Pendente ativar','r')+
+        kpi(P.surpresas.length,'Ativaram sem previsão','Não estavam na lista','')+
+        (P.acerto!=null?kpi(P.acerto+'%','Taxa de acerto','Ativaram / previstos',
+          P.acerto>=70?'g':P.acerto>=40?'a':'r'):'')+
+        '</div>';
+      if(P.surpresas.length){
+        h += '<table><thead><tr><th>Ativaram sem estar previstos</th><th>Dupla</th><th>Etapa</th>'+
+             '</tr></thead><tbody>'+
+             P.surpresas.map(c=>'<tr><td>'+c.cliente+' <span class="mut">#'+c.id+'</span></td>'+
+               '<td>'+c.dupla+'</td><td>'+c.etapa+'</td></tr>').join('')+'</tbody></table>';
+      }
+      if(P.perdidos.length){
+        h += '<h3 style="font-size:14px;margin:16px 0 8px;color:#FF5C5C">Perderam a marcação sem ativar ('+
+             P.perdidos.length+')</h3>'+
+             '<table><thead><tr><th>Cliente</th><th>Dupla</th><th>Observação</th></tr></thead><tbody>'+
+             P.perdidos.map(c=>'<tr><td>'+c.cliente+' <span class="mut">#'+c.id+'</span></td>'+
+               '<td>'+c.dupla+'</td><td class="mut">'+(c.motivo||'')+'</td></tr>').join('')+'</tbody></table>';
+      }
+    }
+  }
+
+  h += '<div class="ato"><span class="ato-n">ATO 6</span><h2 class="ato-t">Saídas e histórico</h2><p>Cancelamentos, tendência longa e conferência</p></div>';
+  // ---- Cancelados excluídos da conta ----
+  if(d.listaCancelados && d.listaCancelados.lista.length){
+    const LC=d.listaCancelados;
+    h += '<h2>Cancelados — onde aconteceu <span>'+LC.lista.length+' clientes</span></h2>';
+    h += '<div class="kpis" style="margin-bottom:14px">'+
+      kpi(LC.adm.length,'Cancelaram no ADM','Antes da call de onboarding — venda ou contrato','a')+
+      kpi(LC.onboarding.length,'Cancelaram no onboarding','Depois da call, antes da entrega','r')+
+      kpi(LC.pos.length,'Cancelaram após a entrega','Com a IA já no ar','r')+
+      '</div>';
+    h += '<div class="como"><h4>Por que separar por fase</h4>'+
+      '<p>Onde o cancelamento aconteceu muda de quem é o problema. <b>No ADM</b> o cliente saiu '+
+      'antes da call de onboarding — é venda ou contrato, não implantação. <b>No onboarding</b> '+
+      'saiu depois da call e antes de receber a IA. <b>Após a entrega</b> saiu com o produto no ar — '+
+      'é expectativa ou performance.</p>'+
+      '<span class="reg">Cobrar o time de implantação pelos cancelamentos do ADM distorce a leitura. '+
+      'A coluna <b>Fonte</b> mostra se a exclusão veio do <b>sistema</b> (status_entrega, confiável) '+
+      'ou da <b>tag</b> do card, que pode estar desatualizada.</span></div>';
+    const bloco=(tit,arr,cor)=>{
+      if(!arr.length) return '';
+      return '<h3 style="font-size:14px;margin:16px 0 8px;color:'+cor+'">'+tit+' ('+arr.length+')</h3>'+
+        '<table><thead><tr><th>Cliente</th><th>Etapa onde parou</th><th>Dupla</th>'+
+        '<th>Status</th><th>Fonte</th></tr></thead><tbody>'+
+        arr.map(c=>'<tr><td>'+c.cliente+' <span class="mut">#'+c.id+'</span></td>'+
+          '<td>'+c.etapa+'</td><td>'+c.dupla+'</td><td>'+c.status+'</td>'+
+          '<td>'+(c.fonte==='sistema'?'<span class="tg">sistema</span>':
+                  '<span class="tw">tag</span>')+'</td></tr>').join('')+'</tbody></table>';
+    };
+    h+=bloco('Cancelaram no ADM — antes da call de onboarding',LC.adm,'#F2A93B');
+    h+=bloco('Cancelaram durante o onboarding',LC.onboarding,'#FF5C5C');
+    h+=bloco('Cancelaram após a entrega — IA já no ar',LC.pos,'#FF5C5C');
+  }
+
+  // ---- Cancelamentos em onboarding ----
+  if(d.prog.listaCancelamento && d.prog.listaCancelamento.length){
+    h += '<h2>Cancelamentos durante a implantação <span>'+d.prog.listaCancelamento.length+
+         ' clientes distintos</span></h2>';
+    h += '<div class="como"><h4>O que é</h4>'+
+      '<p>Clientes que pediram cancelamento <b>antes de concluir o onboarding</b> — ou seja, '+
+      'saíram sem nunca ter usado o produto. São os mais caros: consumiram esteira e não geraram receita recorrente.</p>'+
+      '<span class="reg"><b>Na prática:</b> olhe a etapa em que cada um parou. Cancelamento concentrado '+
+      'numa etapa específica aponta para um ponto de atrito no processo, não para o cliente.</span></div>';
+    h += '<table><thead><tr><th>Cliente</th><th>Pipe</th><th>Etapa onde parou</th><th>Dupla</th>'+
+         '<th style="text-align:right">Dias na etapa</th><th>Situação</th></tr></thead><tbody>';
+    d.prog.listaCancelamento.forEach(c=>{
+      h+='<tr><td>'+c.cliente+' <span class="mut">#'+c.id+'</span></td>'+
+         '<td class="mut">'+c.pipe+'</td><td>'+c.etapa+'</td><td>'+c.dupla+'</td>'+
+         '<td class="n">'+(c.dias!=null?c.dias+'d':'—')+'</td>'+
+         '<td>'+(c.andamento?'<span class="tw">Em andamento</span>':'<span class="tr">Cancelado</span>')+'</td></tr>';
+    });
+    h+='</tbody></table>';
+  }
+
+  // ---- Histórico do Ritual (fonte separada) ----
+  if(d.ritual){
+    const r=d.ritual;
+    h += '<h2>Comparativo histórico <span>'+r.semanas.length+
+         ' semanas do Ritual de Produto · fonte manual, independente dos snapshots</span></h2>';
+    h += '<div class="como"><h4>De onde vem</h4>'+
+      '<p>Estes números foram <b>digitados no ritual semanal</b>, não calculados pelo Cockpit. '+
+      'Ficam num bloco separado de propósito: servem para ver a tendência longa, que os snapshots '+
+      'ainda não têm — mas <b>não devem ser somados</b> aos números das outras seções.</p>'+
+      '<span class="reg">Para acrescentar semanas novas, edite a aba <code>Historico_Ritual</code>.</span></div>';
+    h += '<div class="kpis" style="margin-bottom:14px">'+
+      kpi(r.totalAtiv,'Ativações no período',r.semanas.length+' semanas de ritual','g')+
+      kpi(r.media,'Média por semana','Faixa de '+r.min+' a '+r.max,'')+
+      kpi(r.mensal,'Equivalente mensal','Média semanal × 4,33','')+
+      kpi(r.cv+'%','Variação','Quanto menor, mais previsível',r.cv>30?'a':'g')+
+      kpi(r.piso+'–'+r.teto,'Faixa realista','Média ± um desvio','')+
+      kpi(r.totalOnb,'Onboardings no período','Entrada da esteira','')+
+      '</div>';
+    h += '<div class="panel">'+ritualChart(r)+'</div>';
+    h += ritualIns(r);
+    h += '<div class="tbl" style="margin-top:14px"><table><thead><tr><th>Dupla</th>'+
+         r.semanas.map(w=>'<th style="text-align:right">'+w.slice(5)+'</th>').join('')+
+         '<th style="text-align:right">Total</th></tr></thead><tbody>';
+    r.porDupla.forEach(p=>{
+      h+='<tr><td><b>'+p.dupla+'</b></td>'+p.ativ.map(v=>'<td class="n">'+(v||'·')+'</td>').join('')+
+         '<td class="n hi">'+p.totalAtiv+'</td></tr>';
+    });
+    h+='<tr style="background:rgba(0,207,255,.05)"><td><b>Total</b></td>'+
+       r.ativ.map(v=>'<td class="n">'+v+'</td>').join('')+
+       '<td class="n hi">'+r.totalAtiv+'</td></tr></tbody></table></div>';
+    h += '<div class="como" style="margin-top:8px"><p>Ativações por semana e por dupla. '+
+         'A composição das duplas mudou no período — os nomes são os atuais, a linhagem foi preservada.</p></div>';
+  }
+
+  // Quentes
+  h += '<h2>Problema na BM <span>lista para ação do suporte</span></h2>';
+  h += lista(d.bm,['cliente','etapa','dupla','dias'],'Nenhum card com a tag hoje. ');
+
+  // Aguardando contrato
+  if(d.aguardandoContrato.length){
+    h += '<h2>Aguardando assinatura de contrato <span>'+d.aguardandoContrato.length+' cards</span></h2>';
+    h += '<div class="como"><p>Estes clientes <b>ainda não assinaram</b>. É normal não terem dono nem '+
+         'estarem avançando — a bola está com o ADM, não com a implantação. '+
+         'Eles ficam de fora da conta de "sem responsável" para não poluir o indicador.</p></div>';
+    h += lista(d.aguardandoContrato,[],'');
+    h += '<div class="como" style="margin-top:8px"><p>Cards sem dias na etapa aparecem com '+
+         '<b>—</b>: o Cockpit não conta prazo enquanto o contrato não é assinado.</p></div>';
+  }
+
+  // Sem dupla
+  if(d.semDupla.length){
+    h += '<h2>Sem dupla identificada <span>'+d.semDupla.length+' cards</span></h2>';
+    h += '<div class="como"><p>O responsável do card não bate com nenhum nome da aba <b>Config</b>. '+
+         'Pode ser card sem dono, ou nome escrito de forma diferente do Cockpit. '+
+         'Os marcados como <b>aguardando contrato</b> são esperados; os outros precisam de atribuição.</p></div>';
+    h += '<table><thead><tr><th>Cliente</th><th>Pipe</th><th>Etapa</th><th>Responsável no card</th>'+
+         '<th>Situação</th></tr></thead><tbody>';
+    d.semDupla.forEach(c=>{
+      h+='<tr><td>'+c.cliente+' <span class="mut">#'+c.id+'</span></td><td>'+c.pipe+'</td>'+
+         '<td>'+c.etapa+'</td><td>'+(c.resp||'<span class="mut">— vazio —</span>')+'</td>'+
+         '<td>'+(c.contrato?'<span class="tw">Aguardando contrato</span>':
+                            '<span class="tr">Precisa de dono</span>')+'</td></tr>';
+    });
+    h+='</tbody></table>';
+  }
+
+  // Cruzamento entre pipes
+  h += '<h2>Só no Gestor de IA <span>sem card correspondente no Concierge</span></h2>';
+  h += '<div class="empty" style="margin-bottom:12px">Estes clientes estão sendo construídos, mas '+
+       '<b>não têm jornada aberta no Concierge</b> — ninguém acompanha o relacionamento. '+
+       'Os mais antigos são candidatos à frente de encerramento de migração.</div>';
+  h += lista(d.soGestor,[],'Todos os clientes do Gestor de IA têm card no Concierge.');
+
+  h += '<h2>Só no Concierge <span>sem card no Gestor de IA</span></h2>';
+  h += '<div class="empty" style="margin-bottom:12px">Em geral é normal: o card do Gestor é encerrado '+
+       'quando a construção termina e o do Concierge segue até o cliente estabilizar. '+
+       '<b>Vale olhar os que ainda não estão em Ativo.</b></div>';
+  h += lista(d.soConcierge,[],'Todos os clientes do Concierge têm card no Gestor de IA.');
+
+  // ---- Conferência cruzada ----
+  if(d.conferencia){
+    const c=d.conferencia;
+    const nd=c.soPipe.length+c.soCsv.length+c.cancDiverg.length+c.tagSemStatus.length;
+    h += '<h2>Conferência de dados <span>auditoria · pipe × exportação de clientes</span></h2>';
+    h += '<div class="como"><h4>Isto é auditoria, não indicador</h4>'+
+      '<p>Nenhum número desta seção entra nos KPIs acima. Ela existe para conferir se o pipe '+
+      'e o cadastro de clientes contam a mesma história — e apontar onde não contam.</p>'+
+      '<p>A exportação de clientes traz o <b>status do sistema</b>, que o pipe não mostra. '+
+      'Comparar as duas revela divergências que nenhuma fonte sozinha expõe — '+
+      'tag desatualizada, cliente fora do pipe, etapa fora de sincronia.</p>'+
+      '<span class="reg">Não substitui o pipe: é auditoria. Cole a exportação na aba '+
+      '<code>Colar_Clientes_CSV</code> antes de tirar o snapshot.</span></div>';
+    h += '<div class="kpis" style="margin-bottom:14px">'+
+      kpi(c.totalPipe,'Total pelo pipe','O número usado no dashboard inteiro','')+
+      kpi(c.totalCsv,'Total pela exportação','Mesma régua, fonte diferente',
+          c.totalPipe===c.totalCsv?'g':'a')+
+      kpi(nd,'Divergências',nd?'Precisam de conferência':'As duas fontes batem',nd?'a':'g')+
+      '</div>';
+    const tab=(tit,arr,cols,cor)=>{
+      if(!arr.length) return '';
+      let t='<h3 style="font-size:14px;margin:16px 0 8px;color:'+cor+'">'+tit+' ('+arr.length+')</h3>';
+      t+='<table><thead><tr>'+cols.map(x=>'<th>'+x[0]+'</th>').join('')+'</tr></thead><tbody>'+
+         arr.slice(0,25).map(r=>'<tr>'+cols.map(x=>'<td>'+(x[1](r)||'—')+'</td>').join('')+'</tr>').join('')+
+         '</tbody></table>';
+      return t;
+    };
+    h+=tab('Cancelados no sistema, ainda ativos no pipe',c.cancDiverg,
+      [['Cliente',r=>r.cliente+' <span class="mut">#'+r.id+'</span>'],['Status no sistema',r=>r.status]],'#FF5C5C');
+    h+=tab('Com tag de cancelamento, mas ativos no sistema',c.tagSemStatus,
+      [['Cliente',r=>r.cliente+' <span class="mut">#'+r.id+'</span>'],['Status no sistema',r=>r.status]],'#F2A93B');
+    h+=tab('No pipe e não na exportação',c.soPipe,
+      [['Cliente',r=>r.cliente+' <span class="mut">#'+r.id+'</span>']],'#F2A93B');
+    h+=tab('Na exportação e não no pipe',c.soCsv,
+      [['Cliente',r=>r.cliente+' <span class="mut">#'+r.id+'</span>'],['Etapa',r=>r.etapa],['Status',r=>r.status]],'#FF5C5C');
+    h+=tab('Etapa diferente entre as duas fontes',c.etapaDiverg,
+      [['Cliente',r=>r.cliente+' <span class="mut">#'+r.id+'</span>'],['No pipe',r=>r.pipe],['Na exportação',r=>r.csv]],'#F2A93B');
+    if(c.bate) h+='<div class="como"><p style="color:#3DD68C"><b>As duas fontes batem.</b> '+
+      'Nenhuma divergência de base, cancelamento ou presença.</p></div>';
+  }
+
+
+  return botoes('full')+h;
+}
+
+function matriz(titulo,etapas,linhas,total){
+  let h='<table><thead><tr><th>'+titulo+'</th>'+
+        etapas.map(e=>'<th style="text-align:right">'+e+'</th>').join('')+
+        '<th style="text-align:right">Total</th></tr></thead><tbody>';
+  linhas.forEach(r=>{
+    h+='<tr><td><b>'+r.dupla+'</b></td>'+
+       r.etapas.map(q=>'<td class="n">'+(q||'·')+'</td>').join('')+
+       '<td class="n hi">'+r.total+'</td></tr>';
+  });
+  const soma=etapas.map((_,i)=>linhas.reduce((a,r)=>a+r.etapas[i],0));
+  h+='<tr style="background:rgba(0,207,255,.05)"><td><b>Total</b></td>'+
+     soma.map(q=>'<td class="n">'+q+'</td>').join('')+
+     '<td class="n hi">'+total+'</td></tr></tbody></table>';
+  return h;
+}
+
+function tempoTab(t){
+  let h='<table><thead><tr><th>Dupla</th>'+
+        t.etapas.map(e=>'<th style="text-align:right">'+e+'</th>').join('')+'</tr></thead><tbody>';
+  t.linhas.forEach(r=>{
+    h+='<tr><td><b>'+r.dupla+'</b></td>'+
+       r.valores.map(v=>'<td class="n'+(v>=60?' tr':v>=21?' tw':'')+'">'+
+         (v!=null?v+'d':'·')+'</td>').join('')+'</tr>';
+  });
+  h+='<tr style="background:rgba(0,207,255,.05)"><td><b>Geral</b></td>'+
+     t.total.map(v=>'<td class="n">'+(v!=null?v+'d':'·')+'</td>').join('')+'</tr>';
+  return h+'</tbody></table>';
+}
+
+function entradaSaida(d){
+  const W=1000,H=250,pl=44,pr=14,pt=24,pb=38,iw=W-pl-pr,ih=H-pt-pb;
+  const sems=d.semanas;
+  const soma=(w,c)=>d.serie.filter(s=>s.semana===w).reduce((a,s)=>a+s[c],0);
+  const mx=Math.max(1,...sems.map(w=>Math.max(soma(w,'onb'),soma(w,'ativacoes'),soma(w,'entradas'))));
+  const step=mx<=10?2:mx<=30?5:10, top=(Math.floor(mx/step)+1)*step;
+  const X=i=>pl+(sems.length>1?iw*i/(sems.length-1):iw/2), Y=v=>pt+ih-(v/top)*ih;
+  let s='<svg viewBox="0 0 '+W+' '+H+'" class="chart">';
+  for(let g=0;g<=top;g+=step)
+    s+='<line x1="'+pl+'" y1="'+Y(g)+'" x2="'+(W-pr)+'" y2="'+Y(g)+'" class="grid"/>'+
+       '<text x="'+(pl-7)+'" y="'+(Y(g)+3.5)+'" class="ax ar">'+g+'</text>';
+  sems.forEach((w,i)=>s+='<text x="'+X(i)+'" y="'+(H-12)+'" class="ax ac">'+w.slice(5)+'</text>');
+  [['entradas','#00CFFF','Entraram na carteira'],['onb','#9B8CFF','Onboardings'],
+   ['ativacoes','#3DD68C','Ativações']].forEach(([c,cor])=>{
+    const p=sems.map((w,i)=>(i?'L':'M')+X(i)+' '+Y(soma(w,c))).join(' ');
+    s+='<path d="'+p+'" fill="none" stroke="'+cor+'" stroke-width="2.4" stroke-linejoin="round"/>';
+    sems.forEach((w,i)=>s+='<circle cx="'+X(i)+'" cy="'+Y(soma(w,c))+'" r="3.2" fill="#111A24" stroke="'+cor+'" stroke-width="2"/>'+
+      '<text x="'+X(i)+'" y="'+(Y(soma(w,c))-9)+'" class="vl ac" fill="'+cor+'">'+soma(w,c)+'</text>');
+  });
+  s+='</svg><div class="leg">'+
+     [['#00CFFF','Entraram na carteira'],['#9B8CFF','Onboardings'],['#3DD68C','Ativações']]
+       .map(([c,n])=>'<span><i style="background:'+c+'"></i>'+n+'</span>').join('')+'</div>';
+  return s;
+}
+
+function mudaFunil(btn,chave){
+  document.querySelectorAll('.fsel button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const dd = chave==='#global' ? window.__FUNIL.global : window.__FUNIL.porDupla[chave];
+  document.getElementById('funilbox').innerHTML = funil(dd);
+  document.getElementById('funilins').innerHTML = insFunil(chave);
+}
+
+/** Leitura da pior passagem — global ou da dupla selecionada. */
+function insFunil(chave){
+  const F=window.__FUNIL; if(!F) return '';
+  const p = chave==='#global' ? F.pior.global : F.pior[chave];
+  if(!p) return '';
+  const quem = chave==='#global' ? 'da esteira' : 'da dupla';
+  const seis = Math.round(p.conv/10);
+  return '<div class="ins" style="border-top:none;padding-top:0;margin-top:14px">'+
+    '<div class="ic trava" style="flex:1 1 100%"><h5>Maior perda '+quem+'</h5><p>'+
+    'A maior perda está entre <b>'+p.de+'</b> e <b>'+p.para+'</b>: apenas <b>'+p.conv+'%</b> avançam, '+
+    'com <b>'+p.perdeu+' clientes</b> ficando pelo caminho. De '+p.antes+' que chegaram, '+p.chegaram+' seguiram — '+
+    'menos de '+(seis+1)+' em cada 10.'+
+    (chave==='#global'
+      ? ' É o gargalo real: a matriz mostra estoque, o funil mostra passagem.'
+      : '')+
+    '</p></div></div>';
+}
+
+/** Compara em que passagem cada dupla trava. */
+function compFunil(F){
+  if(!F.comparativo || !F.comparativo.length) return '';
+  const linhas = F.comparativo.map(g=>
+    '<li><b>'+g.passagem+'</b> — '+
+    g.duplas.map(x=>x.dupla+' ('+x.conv+'%)').join(' · ')+'</li>').join('');
+  const fecho = F.mesmoGargalo
+    ? 'Mais de uma dupla trava na mesma passagem — quando isso acontece, o problema é de <b>processo</b>, não de esforço individual.'
+    : 'Cada dupla trava numa passagem diferente — vale entender o que muda no método de cada uma.';
+  return '<div class="como" style="margin-top:12px"><h4>Onde cada dupla trava</h4>'+
+    '<ul style="margin-left:17px">'+linhas+'</ul>'+
+    '<span class="reg">'+fecho+'</span></div>';
+}
+
+function funil(L){
+  if(!L || !L.length) return '<div class="empty">Sem dados.</div>';
+  const W=1000, alt=54, gap=26, pl=250, pr=250, iw=W-pl-pr;
+  const H=L.length*(alt+gap)+18;
+  const max=Math.max(1,...L.map(x=>x.chegaram));
+  let s='<svg viewBox="0 0 '+W+' '+H+'" class="fun">';
+  L.forEach((l,i)=>{
+    const y=i*(alt+gap)+8;
+    const w=Math.max(iw*l.chegaram/max,4);
+    const prox=(i<L.length-1)?Math.max(iw*L[i+1].chegaram/max,4):w*0.55;
+    const x1=pl+(iw-w)/2, x2=pl+(iw-prox)/2;
+    const cor=i===L.length-1?'#3DD68C':'#109CC8';
+    s+='<path d="M'+x1+' '+y+' L'+(x1+w)+' '+y+' L'+(x2+prox)+' '+(y+alt)+' L'+x2+' '+(y+alt)+' Z" '+
+       'fill="'+cor+'" opacity="'+(0.30+0.10*i)+'"/>';
+    s+='<text x="'+(pl-18)+'" y="'+(y+alt/2+5)+'" class="fl" text-anchor="end">'+
+       (i===0?'Entraram na esteira':l.rot)+'</text>';
+    s+='<text x="'+(W-pr+18)+'" y="'+(y+alt/2-4)+'" class="fn">'+l.chegaram+'</text>';
+    s+='<text x="'+(W-pr+62)+'" y="'+(y+alt/2-4)+'" class="fp">já passaram</text>';
+    // No último nível, quem está ali CHEGOU — é o objetivo, não um travamento.
+    const fim=(i===L.length-1);
+    const corA=fim?'#3DD68C':'#F2A93B';
+    s+='<text x="'+(W-pr+18)+'" y="'+(y+alt/2+13)+'" class="fp" style="fill:'+corA+'">'+
+       l.aqui+(fim?' concluíram':' parados aqui')+'</text>';
+    if(l.aqui){
+      const wa=Math.max(w*l.aqui/l.chegaram,3);
+      s+='<rect x="'+(x1+(w-wa)/2)+'" y="'+(y+alt-7)+'" width="'+wa+'" height="5" rx="2" fill="'+corA+'"/>';
+    }
+    if(l.conv!=null){
+      const yy=y-gap/2+3;
+      const c=l.conv>=80?'#3DD68C':l.conv>=55?'#F2A93B':'#FF5C5C';
+      s+='<text x="'+(pl+iw/2)+'" y="'+yy+'" class="fc" fill="'+c+'" text-anchor="middle">▼ '+
+         l.conv+'%'+(l.perdeu?'  ·  −'+l.perdeu:'')+'</text>';
+    }
+  });
+  s+='</svg>';
+  return s;
+}
+
+function ritualChart(r){
+  const W=1000,H=300,pl=46,pr=16,pt=30,pb=42,iw=W-pl-pr,ih=H-pt-pb;
+  const mx=Math.max(1,...r.ativ,...r.onb);
+  const step=mx<=10?2:mx<=30?5:10, top=(Math.floor(mx/step)+1)*step;
+  const n=r.semanas.length;
+  const X=i=>pl+(n>1?iw*i/(n-1):iw/2), Y=v=>pt+ih-(v/top)*ih;
+  let s='<svg viewBox="0 0 '+W+' '+H+'" class="chart">';
+  s+='<text x="'+pl+'" y="16" class="ax" style="font-size:11px;fill:#E6EDF3">Ativações e onboardings por semana</text>';
+  for(let g=0;g<=top;g+=step)
+    s+='<line x1="'+pl+'" y1="'+Y(g)+'" x2="'+(W-pr)+'" y2="'+Y(g)+'" class="grid"/>'+
+       '<text x="'+(pl-7)+'" y="'+(Y(g)+3.5)+'" class="ax ar">'+g+'</text>';
+  // faixa de previsibilidade
+  s+='<rect x="'+pl+'" y="'+Y(r.teto)+'" width="'+iw+'" height="'+(Y(r.piso)-Y(r.teto))+
+     '" fill="#00CFFF" opacity="0.07"/>';
+  s+='<line x1="'+pl+'" y1="'+Y(r.media)+'" x2="'+(W-pr)+'" y2="'+Y(r.media)+
+     '" stroke="#52CEF5" stroke-width="1" stroke-dasharray="4 4" opacity="0.6"/>';
+  r.semanas.forEach((w,i)=>s+='<text x="'+X(i)+'" y="'+(H-14)+'" class="ax ac">'+w.slice(5)+'</text>');
+  [['onb','#9B8CFF'],['ativ','#3DD68C']].forEach(([c,cor])=>{
+    const p=r[c].map((v,i)=>(i?'L':'M')+X(i)+' '+Y(v)).join(' ');
+    s+='<path d="'+p+'" fill="none" stroke="'+cor+'" stroke-width="2.4" stroke-linejoin="round"/>';
+    r[c].forEach((v,i)=>s+='<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="3.2" fill="#111A24" stroke="'+cor+'" stroke-width="2"/>'+
+      '<text x="'+X(i)+'" y="'+(Y(v)-9)+'" class="vl ac" fill="'+cor+'">'+v+'</text>');
+  });
+  s+='</svg><div class="leg"><span><i style="background:#3DD68C"></i>Ativações</span>'+
+     '<span><i style="background:#9B8CFF"></i>Onboardings</span>'+
+     '<span><i style="background:rgba(0,207,255,.25)"></i>Faixa realista ('+r.piso+' a '+r.teto+')</span></div>';
+  return s;
+}
+
+function ritualIns(r){
+  let cor,txt;
+  if(r.varPct>=15){ cor='ok';
+    txt='A entrega <b>subiu '+r.varPct+'%</b> na segunda metade do período (média de '+r.p2+
+        ' contra '+r.p1+' na primeira). A tendência é de crescimento.'; }
+  else if(r.varPct<=-15){ cor='trava';
+    txt='A entrega <b>caiu '+Math.abs(r.varPct)+'%</b> na segunda metade (média de '+r.p2+
+        ' contra '+r.p1+'). Vale entender o que mudou — saída de pessoa, mudança de foco ou trava externa.'; }
+  else { cor='meta';
+    txt='A entrega ficou <b>estável</b> ao longo das '+r.semanas.length+' semanas ('+r.p1+' na primeira metade, '+
+        r.p2+' na segunda). Ritmo consistente, sem sinal de aceleração nem de queda.'; }
+  const meta='Com média de <b>'+r.media+' por semana</b>, a capacidade demonstrada é de <b>'+r.mensal+
+    ' ativações por mês</b> — não uma projeção, o que já foi entregue. '+
+    'A variação de '+r.cv+'% indica que a promessa segura é o piso de <b>'+r.piso+' por semana</b>, não a média.';
+  return '<div class="ins" style="border-top:none;padding-top:0;margin-top:12px">'+
+    '<div class="ic '+cor+'" style="flex:1 1 420px"><h5>Tendência do período</h5><p>'+txt+'</p></div>'+
+    '<div class="ic meta" style="flex:1 1 420px"><h5>Capacidade demonstrada</h5><p>'+meta+'</p></div></div>';
+}
+
+function curvaIns(c,tit){
+  if(!c) return '';
+  return '<div class="ins" style="border-top:none;padding-top:0;margin-top:12px">'+
+    '<div class="ic '+c.cor+'" style="flex:1 1 100%"><h5>'+tit+'</h5><p>'+c.txt+'</p></div></div>';
+}
+
+/** Listas nominais das ações da dupla: quem ativar, quem cobrar formulário, quem destravar. */
+function listasAcao(d,dupla){
+  const cai=(arr,n)=>arr.slice(0,n||99);
+  const prev=(d.previsao&&d.previsao.hoje?d.previsao.hoje.lista:[]).filter(c=>c.dupla===dupla);
+  const form=((d.motivoLista||{})['Aguardando formulário ou dados']||[]).filter(c=>c.dupla===dupla);
+  const ja={}; prev.forEach(c=>ja[c.id]=1); form.forEach(c=>ja[c.id]=1);
+  const fila=((d.motivoLista||{})['Fila interna — sem impedimento externo']||[])
+    .concat((d.motivoLista||{})['Pendente de ajuste interno']||[])
+    .filter(c=>c.dupla===dupla && !ja[c.id]).sort((a,b)=>(b.dias||0)-(a.dias||0));
+  const ext=EXTERNOS.reduce((a,m)=>a.concat(
+      ((d.motivoLista||{})[m]||[]).filter(c=>c.dupla===dupla)
+        .map(c=>Object.assign({motivo:m},c))),[])
+    .sort((a,b)=>(b.dias||0)-(a.dias||0));
+  if(!prev.length && !form.length && !fila.length && !ext.length) return '';
+
+  const tab=(tit,arr,cor,cols)=>{
+    if(!arr.length) return '';
+    return '<div style="flex:1 1 320px;min-width:300px">'+
+      '<div style="font-family:ui-monospace,monospace;font-size:9.5px;letter-spacing:.1em;'+
+      'text-transform:uppercase;color:'+cor+';margin-bottom:6px">'+tit+' ('+arr.length+')</div>'+
+      '<table style="font-size:12px"><tbody>'+
+      cai(arr,12).map(c=>'<tr><td style="padding:6px 8px">'+c.cliente+
+        ' <span class="mut">#'+c.id+'</span></td>'+
+        (cols?'<td style="padding:6px 8px" class="mut">'+(c.etapa||'')+'</td>':'')+
+        '<td class="n" style="padding:6px 8px">'+(c.dias!=null&&c.dias!==''?c.dias+'d':'')+'</td></tr>').join('')+
+      (arr.length>12?'<tr><td colspan="3" class="mut" style="padding:6px 8px">'+
+        '+ '+(arr.length-12)+' outros</td></tr>':'')+
+      '</tbody></table></div>';
+  };
+  return '<div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;padding-top:13px;'+
+    'border-top:1px solid var(--line)">'+
+    tab('Previstos para ativar esta semana',prev,'#3DD68C',true)+
+    tab('Precisam de formulário ou dados',form,'#F2A93B',true)+
+    tab('Parados sem impedimento externo',fila,'#FF5C5C',true)+
+    tabExt('Travados por impedimento externo',ext)+
+    '</div>';
+}
+
+/** Motivos que dependem de terceiros — mesma régua do PDF. */
+const EXTERNOS=['Cliente não responde','Aguardando retorno do cliente',
+  'Aguardando configuração da agenda','Aguardando tráfego','Problema na BM','Projeto congelado',
+  'Pendência de migração','Contrato não assinado','Cancelamento em andamento'];
+
+/** Como a tabela acima, mas com o motivo ao lado do nome. */
+function tabExt(tit,arr){
+  if(!arr.length) return '';
+  return '<div style="flex:1 1 320px;min-width:300px">'+
+    '<div style="font-family:ui-monospace,monospace;font-size:9.5px;letter-spacing:.1em;'+
+    'text-transform:uppercase;color:#9B8CFF;margin-bottom:6px">'+tit+' ('+arr.length+')</div>'+
+    '<table style="font-size:12px"><tbody>'+
+    arr.slice(0,12).map(c=>'<tr><td style="padding:6px 8px">'+c.cliente+
+      ' <span class="mut">#'+c.id+'</span></td>'+
+      '<td style="padding:6px 8px" class="mut">'+c.motivo.toLowerCase()+'</td>'+
+      '<td class="n" style="padding:6px 8px">'+
+      (c.dias!=null&&c.dias!==''?c.dias+'d':'')+'</td></tr>').join('')+
+    (arr.length>12?'<tr><td colspan="3" class="mut" style="padding:6px 8px">+ '+
+      (arr.length-12)+' outros</td></tr>':'')+
+    '</tbody></table></div>';
+}
+
+function insights(p){
+  if(!p.insights || !p.insights.length) return '';
+  return '<div class="ins">'+p.insights.map(i=>
+    '<div class="ic '+i.t+'"><h5>'+i.tit+'</h5><p>'+i.txt+'</p></div>').join('')+'</div>';
+}
+
+function movimento(m){
+  if(!m || (!m.entraram.length && !m.sairam.length)) return '';
+  const li=a=>a.slice(0,8).map(c=>'<li>'+c.cliente+' <span class="mut">#'+c.id+' · '+c.pipe+
+    (c.de?' · veio de '+c.de:'')+(c.para?' · foi para '+c.para:'')+
+    (c.motivo?' · '+c.motivo:'')+'</span></li>').join('');
+  let h='<div class="mov">';
+  if(m.entraram.length) h+='<div><div class="tit">Entraram ('+m.entraram.length+')</div><ul>'+li(m.entraram)+'</ul></div>';
+  if(m.sairam.length)   h+='<div><div class="tit">Saíram ('+m.sairam.length+')</div><ul>'+li(m.sairam)+'</ul></div>';
+  return h+'</div>';
+}
+
+function equacao(p){
+  if(!p.cartIni && !p.cartFim) return '';
+  const calc = p.cartIni + p.entradas - p.saidas;
+  const bate = calc === p.cartFim;
+  const c=(v,l,cor)=>'<span class="cel"><b'+(cor?' class="'+cor+'"':'')+'>'+v+'</b>'+
+                     '<span class="lbl">'+l+'</span></span>';
+  return '<div class="eq">'+
+    c(p.cartIni,'carteira início')+'<i>+</i>'+
+    c(p.entradas,'entraram','ok')+'<i>−</i>'+
+    c(p.saidas,'saíram','no')+'<i>=</i>'+
+    c(calc,'esperado')+
+    '<i style="margin-left:6px">·</i>'+
+    c(p.cartFim,'carteira hoje', bate?'ok':'no')+
+    (bate?'':'<span style="font-size:11px;color:#FF5C5C;margin-left:8px">diferença de '+
+      Math.abs(calc-p.cartFim)+' — ver cards trocados de dupla</span>')+
+    '</div>';
+}
+
+function barra(vals,total,cores){
+  if(!total) return '';
+  return '<div class="bar">'+vals.map((v,i)=>v?'<span style="width:'+(v/total*100)+
+    '%;background:'+cores[i]+'">'+(v/total>=0.09?v:'')+'</span>':'').join('')+'</div>';
+}
+
+function j5(d,dup,campo){
+  if(!d.janela5 || !d.janela5.duplas[dup]) return 0;
+  return d.janela5.duplas[dup][campo]||0;
+}
+function j5d(d){ return d.janela5? d.janela5.diasReais : 0; }
+
+/** Lista nominal de quem ativou e quem fez onboarding na janela — para conferência. */
+function listaJanela(d,dup){
+  if(!d.janela5 || !d.janela5.duplas[dup]) return '';
+  const x=d.janela5.duplas[dup];
+  if(!x.ativacoes.length && !x.onboardings.length) return '';
+  const li=a=>a.map(c=>'<li>'+c.cliente+' <span class="mut">#'+c.id+' · '+c.de+' → '+c.para+
+    ' · '+c.pipe+'</span></li>').join('');
+  let s='<div class="mov">';
+  if(x.validacao && x.validacao.length)
+    s+='<div><div class="tit">Foram para Validação ('+x.validacao.length+')</div><ul>'+li(x.validacao)+'</ul></div>';
+  if(x.ongoing && x.ongoing.length)
+    s+='<div><div class="tit">Concluíram para Ongoing ('+x.ongoing.length+')</div><ul>'+li(x.ongoing)+'</ul></div>';
+  if(x.onboardings.length)
+    s+='<div><div class="tit">Fizeram onboarding ('+x.onboardings.length+')</div><ul>'+li(x.onboardings)+'</ul></div>';
+  return s+'</div>';
+}
+
+function jan(d){ return d.intervalo? (d.intervalo===1?'último dia':'últimos '+d.intervalo+' dias') : 'período'; }
+
+/** Modo apresentação: funil, ADM, duplas e foco. Nada mais. */
+function renderApresentacao(d){
+  let h='';
+  h += '<div class="top"><h1>Semana — <em>leitura para o time</em></h1>'+
+       '<span class="dt">Foto de '+d.data+'</span></div>';
+  h += botoes('ap');
+  h += '<div class="ap">';
+
+  // 1 · FUNIL
+  h += '<h2>1 · O funil da esteira</h2>'+
+       '<p class="lead">Quantos já passaram por cada nível e onde a carteira perde gente.</p>';
+  h += '<div class="fwrap">'+funil(d.funil.global)+'</div>';
+  if(d.funil.pior && d.funil.pior.global){
+    const p=d.funil.pior.global;
+    h += '<div class="ins" style="border-top:none;padding-top:0;margin-top:12px">'+
+      '<div class="ic trava" style="flex:1 1 100%"><h5>O gargalo</h5><p>'+
+      'A maior perda é entre <b>'+p.de+'</b> e <b>'+p.para+'</b>: só <b>'+p.conv+'%</b> avançam, '+
+      'com <b>'+p.perdeu+' clientes</b> retidos. É onde uma ação destrava mais gente de uma vez.'+
+      '</p></div></div>';
+  }
+  if(d.funil.comparativo && d.funil.comparativo.length){
+    h += '<div class="como" style="margin-top:10px"><h4>Onde cada dupla trava</h4><ul style="margin-left:17px">'+
+      d.funil.comparativo.map(g=>'<li><b>'+g.passagem+'</b> — '+
+        g.duplas.map(x=>x.dupla+' ('+x.conv+'%)').join(' · ')+'</li>').join('')+'</ul></div>';
+  }
+
+  // 2 · ADM
+  h += '<h2>2 · ADM — antes do onboarding</h2>'+
+       '<p class="lead">Quem ainda não entrou na esteira porque falta assinar. '+
+       btnPng('#ADM','PNG do slide do ADM')+'</p>';
+  h += '<div class="kpis">'+
+    kpi(d.jornada.aguardandoContrato,'Aguardando assinatura','Fila do ADM',
+        d.jornada.aguardandoContrato?'a':'g')+
+    (d.adm.total?kpi(d.adm.pendentes,'Pendentes no pipe','Enviados ao cliente','a'):'')+
+    (d.adm.total?kpi(d.adm.vencidos,'Com SLA vencido','Passaram do prazo',d.adm.vencidos?'r':'g'):'')+
+    (d.adm.total?kpi(d.adm.esperaMedia!=null?d.adm.esperaMedia+'d':'—','Espera média','Dias aguardando','a'):'')+
+    kpi(d.jornada.emOnboarding,'Em onboarding','Carteira de trabalho','')+
+    kpi(d.jornada.ativados,'Já ativados','IA ativa','g')+
+    '</div>';
+  if(d.jornada.listaContrato && d.jornada.listaContrato.length)
+    h += '<div class="nm">Aguardando contrato: '+
+         d.jornada.listaContrato.map(c=>'<b>'+c.cliente+'</b>').join(' · ')+'</div>';
+
+  // 3 · DUPLAS
+  h += '<h2>3 · As duplas</h2>'+
+       '<p class="lead">Carteira, ponto forte, ponto fraco e quem precisa destravar.</p>';
+  d.porDupla.filter(p=>p.dupla!=='Sem dupla'&&p.dupla!=='QA').forEach(p=>{
+    const ins=p.insights||[];
+    const forte=ins.filter(i=>i.t==='ok')[0];
+    const fraco=ins.filter(i=>i.t==='trava'||i.t==='gargalo')[0];
+    const meta=ins.filter(i=>i.t==='meta')[0];
+    const prev=(d.previsao&&d.previsao.hoje?d.previsao.hoje.lista:[]).filter(c=>c.dupla===p.dupla);
+    const form=((d.motivoLista||{})['Aguardando formulário ou dados']||[]).filter(c=>c.dupla===p.dupla);
+    const jaListado={};
+    prev.forEach(c=>jaListado[c.id]=1); form.forEach(c=>jaListado[c.id]=1);
+    const fila=((d.motivoLista||{})['Fila interna — sem impedimento externo']||[])
+      .filter(c=>c.dupla===p.dupla && !jaListado[c.id])
+      .sort((a,b)=>(b.dias||0)-(a.dias||0));
+
+    h += '<div class="dp"><div class="dp-h"><div class="tt"><h3>'+p.dupla+'</h3>'+
+      btnPdf(p.dupla)+btnPng(p.dupla)+'</div><div class="dp-num">'+
+      '<div><b>'+p.emOnboarding+'</b><span>em onboarding</span></div>'+
+      '<div><b>'+p.quentes+'</b><span>prontos</span></div>'+
+      '<div><b>'+prev.length+'</b><span>previstos</span></div>'+
+      '<div><b>'+(p.ativacoes||0)+'</b><span>ativo</span></div>'+
+      '</div></div>';
+    h += '<div class="ff">'+
+      (forte?'<div class="forte"><h6>Ponto forte</h6>'+forte.txt+'</div>':'')+
+      (fraco?'<div class="fraco"><h6>Ponto de atenção</h6>'+fraco.txt+'</div>':'')+
+      '</div>';
+    const its=[];
+    if(prev.length) its.push('Ativar <b>'+prev.length+'</b>: '+
+      prev.slice(0,6).map(c=>c.cliente).join(', ')+(prev.length>6?' +'+(prev.length-6):''));
+    if(form.length) its.push('Cobrar formulário de <b>'+form.length+'</b>: '+
+      form.slice(0,5).map(c=>c.cliente).join(', ')+(form.length>5?' +'+(form.length-5):''));
+    if(fila.length) its.push('Destravar os mais parados: '+
+      fila.slice(0,5).map(c=>c.cliente+' ('+(c.dias||0)+'d)').join(', '));
+    const prox=(d.previsao&&d.previsao.hoje&&d.previsao.hoje.proxima?d.previsao.hoje.proxima:[])
+      .filter(c=>c.dupla===p.dupla);
+    if(prox.length) its.push('Próxima semana, <b>'+prox.length+'</b> previstos: '+
+      prox.slice(0,5).map(c=>c.cliente).join(', ')+(prox.length>5?' +'+(prox.length-5):''));
+    const extAp=EXTERNOS.reduce((a,m)=>a.concat(
+        ((d.motivoLista||{})[m]||[]).filter(c=>c.dupla===p.dupla)
+          .map(c=>Object.assign({motivo:m},c))),[])
+      .sort((a,b)=>(b.dias||0)-(a.dias||0));
+    if(extAp.length) its.push('Cobrar os <b>'+extAp.length+'</b> travados por fora: '+
+      extAp.slice(0,4).map(c=>c.cliente+' ('+c.motivo.toLowerCase()+')').join(', ')+
+      (extAp.length>4?' +'+(extAp.length-4):''));
+    if(its.length)
+      h += '<div class="fo"><h6>Foco da próxima semana</h6><ul>'+
+           its.map(x=>'<li>'+x+'</li>').join('')+'</ul></div>';
+    h += '</div>';
+  });
+
+  // 4 · FOCO GERAL
+  if(d.foco && d.foco.geral && d.foco.geral.length){
+    h += '<h2>4 · Foco do time</h2>'+
+         '<p class="lead">O que vale para todos nesta semana.</p>';
+    h += '<div class="ins" style="border-top:none;padding-top:0">'+
+      d.foco.geral.map(g=>'<div class="ic '+(g.cor||'meta')+'" style="flex:1 1 340px">'+
+        '<h5>'+g.tit+'</h5><p>'+g.txt+'</p></div>').join('')+'</div>';
+    if(d.foco.acompanhar && d.foco.acompanhar.length)
+      h += '<div class="kpis" style="margin-top:12px">'+
+        d.foco.acompanhar.map(a=>kpi(a.hoje,a.ind,'alvo: '+a.alvo,'')).join('')+'</div>';
+  }
+  h += '</div>';
+  return h;
+}
+
+/** Barra de progresso contra a meta: verde bateu, âmbar perto, vermelho longe. */
+function barraMeta(valor,meta,inverso){
+  if(valor==null) return '<span class="mut">sem dado</span>';
+  const pc = inverso ? (valor<=meta?100:Math.max(0,Math.round(meta/valor*100)))
+                     : Math.min(100,Math.round(valor/meta*100));
+  const bateu = inverso ? valor<=meta : valor>=meta;
+  const cor = bateu?'#3DD68C':pc>=70?'#F2A93B':'#FF5C5C';
+  return '<div class="bar" style="height:18px"><span style="width:'+pc+
+    '%;background:'+cor+'"></span></div>';
+}
+
+/** Abre e fecha a linha de detalhe embaixo da dupla. */
+function abreLinha(tr){
+  const det=tr.nextElementSibling;
+  if(!det||!det.classList.contains('det')) return;
+  const aberto=det.style.display!=='none';
+  det.style.display=aberto?'none':'';
+  tr.classList.toggle('aberto',!aberto);
+}
+
+/** Lista dos ativados da dupla: id, nome, quando ativou, CSAT e ajustes. */
+function detAtivados(l,cols,modo){
+  const L=l.listaAtivados||[];
+  const corpo = !L.length ? '<span class="mut">Nenhum cliente ativado no mês.</span>'
+    : '<div class="det-l">'+L.map(c=>{
+        let extra='';
+        if(modo==='csat') extra = c.nota==='sem nota'
+          ? ' · <span class="tw">respondeu sem nota</span>'
+          : c.nota!=null
+          ? ' · <span class="'+(c.nota<=3?'tr':'tg')+'">nota '+c.nota+'</span>'
+          : ' · <span class="tw">sem resposta</span>';
+        if(modo==='aju') extra = c.ajustes
+          ? ' · <span class="tw">'+c.ajustes+' ajuste'+(c.ajustes>1?'s':'')+'</span>' : '';
+        return '<span><span class="mut">#'+c.id+'</span> <b>'+c.cliente+'</b> '+
+               '<span class="mut">· entrou em Validação '+c.data+'</span>'+extra+'</span>';
+      }).join('')+'</div>';
+  return '<tr class="det" style="display:none"><td colspan="'+cols+'">'+corpo+'</td></tr>';
+}
+
+function renderMetas(d){
+  const M=d.metas;
+  let h='<div class="top"><h1>Metas Onboarding — <em>desempenho das duplas</em></h1>'+
+        '<span class="dt">'+(M?M.mes:'—')+' · foto de '+d.data+'</span></div>';
+  h+=botoes('metas');
+  if(!M||!M.linhas.length){
+    return h+'<div class="empty"><b>Sem base para calcular.</b><br>'+
+      'Rode <b>Criar abas</b> no menu Painel Onboarding para gerar as abas '+
+      '<code>Metas_CSAT</code>, <code>Metas_Indicacoes</code> e <code>Metas_Ajustes</code>, '+
+      'preencha e tire um snapshot.</div>';
+  }
+  const T=M.total, A=M.metas;
+
+  h+='<div class="como"><h4>De onde vem cada número</h4>'+
+    '<p>O <b>denominador é o mesmo número da carteira</b>: quem entrou em Validação 7 dias '+
+    'dentro de '+M.mes+' e está com a tag Ativo. Se divergir das Ativações do mês lá na aba '+
+    'Completo, é bug, não arredondamento.</p>'+
+    '<p>Só entram as três duplas do piloto. <b>Ajuste conta apenas quando foi pedido '+
+    'depois da ativação</b> do cliente; pedido antes disso é construção e fica de fora.</p>'+
+    '<p>As três abas são preenchidas à mão, porque esses dados não existem no Cockpit: '+
+    '<code>Metas_CSAT</code> (data, id, cliente, dupla, nota), '+
+    '<code>Metas_Indicacoes</code> (data, dupla, indicado, status) e '+
+    '<code>Ajustes</code> (data, id, cliente, dupla, tipo). O cabeçalho pode estar escrito '+
+    'de outro jeito — o painel entende variações como responsável no lugar de dupla ou '+
+    'motivo no lugar de tipo.</p>'+
+    (M.semRegistro.csat||M.semRegistro.ind||M.semRegistro.aju
+      ? '<span class="reg" style="color:#F2A93B">Ainda sem registro neste mês em: '+
+        [M.semRegistro.csat?'CSAT':'',M.semRegistro.ind?'Indicações':'',
+         M.semRegistro.aju?'Ajustes':''].filter(Boolean).join(', ')+
+        '. Enquanto a aba estiver vazia o número aparece como sem dado, não como zero.</span>'
+      : '')+'</div>';
+
+  h+='<h2>O time no mês <span>contra o alvo do piloto</span></h2>';
+  h+='<div class="kpis">'+
+    kpi(T.ativados,'Ativados no mês','Cohort de '+M.mes+' — base de tudo','')+
+    kpi(T.taxa!=null?T.taxa+'%':'—','Responderam o CSAT','alvo: '+A.csatResposta+'%',
+        T.taxa>=A.csatResposta?'g':'a')+
+    kpi(T.nota!=null?String(T.nota).replace('.',','):'—','Nota média','alvo: ≥ '+
+        String(A.csatNota).replace('.',','),T.nota>=A.csatNota?'g':'a')+
+    kpi(T.detratores!=null?T.detratores+'%':'—','Detratores','nota até 3 · alvo: < '+
+        A.csatDetrator+'%',T.detratores!=null&&T.detratores<A.csatDetrator?'g':'r')+
+    kpi(T.indicacoes,'Indicações registradas','alvo: '+A.indicacoes+' por dupla','')+
+    kpi(T.convertidas,'Indicações convertidas','R$ '+T.comissao.toLocaleString('pt-BR')+
+        ' em comissão','g')+
+    kpi(T.ajustes,'Ajustes pós-ativação','Pedidos pelos ativados de '+M.mes+' depois de ativar','a')+
+    '</div>';
+
+  h+='<h2>Placar de indicações <span>convertidas primeiro, depois registradas</span></h2>';
+  h+='<table><thead><tr><th>#</th><th>Dupla</th>'+
+     '<th style="text-align:right">Registradas</th><th style="text-align:right">Meta</th>'+
+     '<th style="width:26%">Progresso</th>'+
+     '<th style="text-align:right">Convertidas</th><th style="text-align:right">Comissão</th>'+
+     '</tr></thead><tbody>'+
+    M.placar.map((l,i)=>'<tr><td class="hi">'+(i+1)+'</td><td><b>'+l.dupla+'</b></td>'+
+      '<td class="n">'+l.indicacoes+'</td><td class="n mut">'+A.indicacoes+'</td>'+
+      '<td>'+barraMeta(l.indicacoes,A.indicacoes)+'</td>'+
+      '<td class="n tg">'+l.convertidas+'</td>'+
+      '<td class="n">R$ '+l.comissao.toLocaleString('pt-BR')+'</td></tr>').join('')+
+    '</tbody></table>';
+  h+='<div class="como" style="margin-top:8px"><p>Convertida é a indicação com '+
+     '<b>status convertida</b> na aba. Cada conversão vale R$ '+A.comissao+
+     ' na dupla, metade para cada pessoa.</p></div>';
+
+  h+='<h2>CSAT por dupla <span>medido sobre quem a dupla ativou no mês</span></h2>';
+  h+='<table><thead><tr><th>Dupla</th><th style="text-align:right">Ativados</th>'+
+     '<th style="text-align:right">Respostas</th><th style="text-align:right">Taxa</th>'+
+     '<th style="width:20%">Contra os '+A.csatResposta+'%</th>'+
+     '<th style="text-align:right">Nota</th><th style="text-align:right">Detratores</th>'+
+     '</tr></thead><tbody>'+
+    M.linhas.map(l=>'<tr class="abre" onclick="abreLinha(this)">'+
+      '<td><span class="seta">▶</span><b>'+l.dupla+'</b></td>'+
+      '<td class="n">'+l.ativados+'</td><td class="n">'+l.respostas+'</td>'+
+      '<td class="n '+(l.taxa>=A.csatResposta?'tg':'tw')+'">'+
+        (l.taxa!=null?l.taxa+'%':'—')+'</td>'+
+      '<td>'+barraMeta(l.taxa,A.csatResposta)+'</td>'+
+      '<td class="n '+(l.nota>=A.csatNota?'tg':'tw')+'">'+
+        (l.nota!=null?String(l.nota).replace('.',','):'—')+'</td>'+
+      '<td class="n '+(l.detratores!=null&&l.detratores<A.csatDetrator?'tg':'tr')+'">'+
+        (l.detratores!=null?l.detratores+'% ('+l.nDetratores+')':'—')+'</td></tr>'+
+      detAtivados(l,7,'csat')).join('')+
+    '</tbody></table>';
+
+  if(M.orfaos && M.orfaos.csatLidas!=null){
+    h+='<div class="como" style="margin-top:10px"><p>Aba CSAT: <b>'+M.orfaos.csatLidas+
+      '</b> respostas lidas no total, <b>'+M.orfaos.csatTotal+'</b> deste mês.'+
+      (M.orfaos.csatSemData?' <span class="tw"><b>'+M.orfaos.csatSemData+'</b> sem data '+
+        'reconhecida — ficam fora de qualquer mês.</span>':'')+'</p></div>';
+  }
+  if(M.orfaos && M.orfaos.csatLista && M.orfaos.csatLista.length){
+    h+='<div class="empty" style="margin-top:10px"><b>'+M.orfaos.csatLista.length+' de '+
+      M.orfaos.csatTotal+' respostas de CSAT do mês não entraram na conta.</b><br>'+
+      'A resposta não traz id do card e o nome não bate com nenhum cliente ativado, ou a nota '+
+      'não está como número. Corrija o nome na aba CSAT ou acrescente uma coluna id.</div>';
+    h+='<table style="margin-top:8px"><thead><tr><th>Data</th><th>Cliente na resposta</th>'+
+      '<th>Nota</th><th>Por que ficou de fora</th></tr></thead><tbody>'+
+      M.orfaos.csatLista.map(x=>'<tr><td class="mut">'+x.data+'</td><td>'+x.cliente+'</td>'+
+        '<td class="mut">'+x.nota+'</td><td class="tw">'+x.motivo+'</td></tr>').join('')+
+      '</tbody></table>';
+  }
+
+  h+='<h2>Controle de ajustes <span>ativados de '+M.mes+' × ajustes que pediram depois de ativar</span></h2>';
+  h+='<table><thead><tr><th>Dupla</th><th style="text-align:right">Ativados</th>'+
+     '<th style="text-align:right">Ajustes</th>'+
+     '<th style="text-align:right">Clientes que pediram</th>'+
+     '<th style="text-align:right">Ajustes por ativado</th></tr></thead><tbody>'+
+    M.linhas.map(l=>'<tr class="abre" onclick="abreLinha(this)">'+
+      '<td><span class="seta">▶</span><b>'+l.dupla+'</b></td>'+
+      '<td class="n">'+l.ativados+'</td><td class="n">'+l.ajustes+'</td>'+
+      '<td class="n">'+l.clientesComAjuste+'</td>'+
+      '<td class="n">'+(l.ajustePorAtivado!=null?
+        String(l.ajustePorAtivado).replace('.',','):'—')+'</td></tr>'+
+      detAtivados(l,5,'aju')).join('')+
+    '</tbody></table>';
+  if(M.orfaos){
+    const o=M.orfaos;
+    h+='<div class="como" style="margin-top:10px"><p><b>Leitura da aba Ajustes:</b> '+
+      (o.ajuLidas||0)+' linhas lidas, '+(o.ajuTotal||0)+' em '+M.mes+
+      (o.ajuSemId?', <span class="tw">'+o.ajuSemId+' sem id do card</span> (nem em coluna, nem no título)':'')+
+      (o.ajuMeses&&o.ajuMeses.length?'. Meses encontrados: '+o.ajuMeses.join(', '):'')+'.</p>'+
+      (o.ajuOutrosMeses?'<p>'+o.ajuOutrosMeses+' ajustes de '+M.mes+' são de clientes ativados '+
+        'em outros meses e não entram nesta tabela, que mede só o cohort do mês.</p>':'')+
+      (!o.ajuLidas?'<p class="tw">Nenhuma linha lida: confira se a aba se chama exatamente '+
+        'Ajustes e se a primeira linha é o cabeçalho.</p>':'')+
+      (o.ajuLidas&&!o.ajuTotal?'<p class="tw">Há linhas, mas nenhuma com data em '+M.mes+
+        '. Confira se a coluna de data está reconhecida.</p>':'')+'</div>';
+  }
+  if(M.orfaos && M.orfaos.aju.length){
+    h+='<div class="empty" style="margin-top:10px"><b>'+M.orfaos.aju.length+' de '+
+      M.orfaos.ajuTotal+' ajustes do mês não entraram em nenhuma dupla.</b><br>'+
+      'Ou o pedido veio antes da ativação, ou o cliente não é de uma das três duplas '+
+      'do piloto, ou falta o id do card para o painel saber de quem é.</div>';
+    h+='<table style="margin-top:8px"><thead><tr><th>Data</th><th>Cliente</th><th>Id</th>'+
+      '<th>Dupla na linha</th><th>Por que ficou de fora</th></tr></thead><tbody>'+
+      M.orfaos.aju.map(x=>'<tr><td class="mut">'+x.data+'</td><td>'+x.cliente+'</td>'+
+        '<td class="mut">'+x.id+'</td><td class="mut">'+(x.dupla||'— vazio —')+'</td>'+
+        '<td class="tw">'+(x.motivo||'')+'</td></tr>').join('')+'</tbody></table>';
+  }
+  return h;
+}
+
+function botoes(atual){
+  return '<div class="modo">'+
+    '<button class="'+(atual==='ap'?'on':'')+'" onclick="mudaModo(\'ap\')">Apresentação</button>'+
+    '<button class="'+(atual==='full'?'on':'')+'" onclick="mudaModo(\'full\')">Completo</button>'+
+    '<button class="'+(atual==='metas'?'on':'')+'" onclick="mudaModo(\'metas\')">Metas Onboarding</button>'+
+    '<button class="btnpdf" onclick="pdfTodas(this)">📄 PDF de todas as duplas</button>'+
+    '<button class="btnpng" onclick="pngTodos(this)">🖼️ PNG de todos os slides</button>'+
+    '</div>';
+}
+
+function mudaModo(m){
+  window.__MODO=m;
+  document.getElementById('app').innerHTML =
+    m==='metas' ? renderMetas(window.__D)
+    : m==='ap' ? renderApresentacao(window.__D) : renderCompleto(window.__D);
+  window.scrollTo(0,0);
+}
+
+function kpi(v,t,s,c){
+  return '<div class="kpi '+c+'"><b>'+v+'</b><span>'+t+'</span>'+
+         '<span style="font-size:11px;color:#7A8A99;margin-top:6px">'+s+'</span></div>';
+}
+
+function lista(arr,cols,vazio){
+  if(!arr.length) return '<div class="empty">'+vazio+'</div>';
+  let h='<table><thead><tr><th>Cliente</th><th>Etapa</th><th>Dupla</th>'+
+        '<th style="text-align:right">Dias na etapa</th><th>Tags</th></tr></thead><tbody>';
+  arr.forEach(c=>{
+    const alerta = (c.dias||0)>=30;
+    h+='<tr><td>'+c.cliente+' <span class="mut">#'+c.id+'</span></td>'+
+       '<td>'+c.etapa+'</td><td>'+c.dupla+'</td>'+
+       '<td class="n '+(alerta?'tr':'')+'">'+(c.dias!=null?c.dias+'d':'—')+'</td>'+
+       '<td>'+(c.tags?c.tags.split(' | ').map(t=>'<span class="tag">'+t+'</span>').join(' '):'')+'</td></tr>';
+  });
+  return h+'</tbody></table>';
+}
+
+function linhas(d,campo,titulo){
+  const W=560,H=250,pl=42,pr=14,pt=26,pb=40,iw=W-pl-pr,ih=H-pt-pb;
+  const duplas=[...new Set(d.serie.map(s=>s.dupla))].sort();
+  const sems=d.semanas;
+  const val=(dup,w)=>d.serie.filter(s=>s.semana===w&&s.dupla===dup).reduce((a,s)=>a+s[campo],0);
+  const totW=w=>d.serie.filter(s=>s.semana===w).reduce((a,s)=>a+s[campo],0);
+  let mx=Math.max(1,...sems.map(totW));
+  const step=mx<=10?2:mx<=30?5:10; const top=(Math.floor(mx/step)+1)*step;
+  const X=i=>pl+(sems.length>1?iw*i/(sems.length-1):iw/2), Y=v=>pt+ih-(v/top)*ih;
+  let s='<svg viewBox="0 0 '+W+' '+H+'" class="chart">';
+  s+='<text x="'+pl+'" y="14" class="ax" style="font-size:11px;fill:#E6EDF3">'+titulo+'</text>';
+  for(let g=0;g<=top;g+=step){
+    s+='<line x1="'+pl+'" y1="'+Y(g)+'" x2="'+(W-pr)+'" y2="'+Y(g)+'" class="grid"/>'+
+       '<text x="'+(pl-7)+'" y="'+(Y(g)+3.5)+'" class="ax ar">'+g+'</text>';
+  }
+  sems.forEach((w,i)=>{s+='<text x="'+X(i)+'" y="'+(H-12)+'" class="ax ac">'+w.slice(5)+'</text>';});
+  // Total em destaque
+  const dTot=sems.map((w,i)=>(i?'L':'M')+X(i)+' '+Y(totW(w))).join(' ');
+  s+='<path d="'+dTot+'" fill="none" stroke="#E6EDF3" stroke-width="2.6" stroke-linejoin="round"/>';
+  sems.forEach((w,i)=>{s+='<circle cx="'+X(i)+'" cy="'+Y(totW(w))+'" r="3.4" fill="#111A24" stroke="#E6EDF3" stroke-width="2"/>'+
+    '<text x="'+X(i)+'" y="'+(Y(totW(w))-9)+'" class="vl ac" fill="#E6EDF3">'+totW(w)+'</text>';});
+  duplas.forEach((dup,k)=>{
+    const c=CORES[k%CORES.length];
+    const p=sems.map((w,i)=>(i?'L':'M')+X(i)+' '+Y(val(dup,w))).join(' ');
+    s+='<path d="'+p+'" fill="none" stroke="'+c+'" stroke-width="1.8" stroke-dasharray="4 3"/>';
+    sems.forEach((w,i)=>{s+='<circle cx="'+X(i)+'" cy="'+Y(val(dup,w))+'" r="2.6" fill="'+c+'"/>';});
+  });
+  s+='</svg><div class="leg"><span><i style="background:#E6EDF3"></i>Total</span>'+
+     duplas.map((dup,k)=>'<span><i style="background:'+CORES[k%CORES.length]+'"></i>'+dup+'</span>').join('')+
+     '</div>';
+  return s;
+}
+</script>
+</body></html>

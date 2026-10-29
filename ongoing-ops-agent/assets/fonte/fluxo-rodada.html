@@ -1,0 +1,65 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>
+.row{display:flex;align-items:stretch;gap:0}
+.st{flex:1;position:relative}
+.st .n{font-family:'Inter Display';font-weight:800;font-size:15px;color:#031019;background:#00CFFF;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.st h3{font-size:19px;font-weight:700;margin-bottom:6px}
+.st p{font-size:14.5px;color:#9FB0BF;line-height:1.45}
+.arr{width:44px;display:flex;align-items:center;justify-content:center;color:#109CC8;font-size:26px;flex:none}
+.down{display:flex;justify-content:center;color:#109CC8;font-size:26px;height:40px;align-items:center}
+.big{border:1px solid rgba(0,207,255,.35);background:linear-gradient(160deg,#0C1622,#0A1119);border-radius:16px;padding:22px 24px}
+.big .hd{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.subs{display:flex;gap:10px}
+.sub{flex:1;background:#111A24;border:1px solid #1D2A38;border-radius:12px;padding:14px 14px 16px}
+.sub .l{font-size:13px;font-weight:800;color:#52CEF5;margin-bottom:6px}
+.sub b{display:block;font-size:15.5px;margin-bottom:5px}
+.sub span{font-size:13px;color:#9FB0BF;line-height:1.4;display:block}
+.sub.dbg{background:rgba(242,169,59,.09);border:1.5px solid #F2A93B;box-shadow:0 0 0 4px rgba(242,169,59,.08)}
+.sub.dbg .l{color:#F2A93B}
+.tag{font-size:11px;font-weight:800;letter-spacing:.12em;color:#031019;background:#F2A93B;border-radius:5px;padding:3px 7px;display:inline-block;margin-bottom:8px}
+.guard{margin-top:26px;display:flex;gap:10px;flex-wrap:wrap}
+.guard div{font-size:13.5px;color:#C9D4DE;background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.28);border-radius:20px;padding:6px 13px}
+.guard .t{background:none;border:none;color:#FF6B6B;font-weight:700;letter-spacing:.12em;font-size:12px;text-transform:uppercase;padding:6px 4px 6px 0}
+</style></head><body><div id="c">
+<div class="sup">Ongoing Ops Agent</div>
+<h1>Fluxo de uma rodada</h1>
+<p class="lead">Do ticket aberto ao retorno pronto para o médico. O passo que mais muda o resultado é o debug da conversa real, antes de qualquer ajuste.</p>
+
+<div class="row">
+ <div class="st card"><div class="n">1</div><h3>Mapear</h3><p>Puxa os tickets pendentes da responsável no sistema de tickets</p></div>
+ <div class="arr">→</div>
+ <div class="st card"><div class="n">2</div><h3>Agrupar</h3><p>Por ID do cliente: 1 cliente = 1 unidade de trabalho</p></div>
+ <div class="arr">→</div>
+ <div class="st card"><div class="n">3</div><h3>Em andamento</h3><p>Move todos os tickets da rodada de uma vez</p></div>
+</div>
+<div class="down">↓</div>
+
+<div class="big">
+ <div class="hd"><div class="st" style="flex:none"><div class="n" style="margin:0">4</div></div><h3 style="font-size:21px">Por cliente, ticket a ticket</h3></div>
+ <div class="subs">
+  <div class="sub"><div class="l">a</div><b>Tenant certo</b><span>Troca para a conta do cliente na plataforma</span></div>
+  <div class="sub dbg"><div class="tag">DEBUG</div><div class="l">b</div><b>Conversa real</b><span>Estágio, instruções recebidas, ferramentas chamadas e o que retornaram</span></div>
+  <div class="sub"><div class="l">c</div><b>Causa real</b><span>Prompt, estágio, agenda ou template?</span></div>
+  <div class="sub"><div class="l">d</div><b>Nova versão</b><span>Duplica a ativa → ajusta → salva → publica</span></div>
+  <div class="sub"><div class="l">e</div><b>Simulador</b><span>Reproduz o caso do ticket</span></div>
+  <div class="sub"><div class="l">f</div><b>Ativa e resolve</b><span>Versão ativada, ticket Resolvido</span></div>
+ </div>
+</div>
+<div class="down">↓</div>
+
+<div class="row">
+ <div class="st card"><div class="n">5</div><h3>Retorno único por cliente</h3><p>No canal da equipe de suporte, em linguagem simples para repassar ao médico</p></div>
+ <div class="arr">→</div>
+ <div class="st card"><div class="n">6</div><h3>Fechamento</h3><p>Relatório da rodada: versão ativada, resultado do teste, o que o debug mostrou e pendências</p></div>
+</div>
+
+<div class="guard">
+ <div class="t">Travas</div>
+ <div>Nunca corrigir só pelo texto do ticket</div>
+ <div>Nunca inventar valor, endereço ou horário</div>
+ <div>Ambiguidade trava o ajuste</div>
+ <div>Deslogou, para</div>
+ <div>Nunca excluir</div>
+</div>
+<div class="foot"><span>Diagrama ilustrativo, sem dados de clientes</span><span>Ana Jacqueline · Portfólio IA Ops</span></div>
+</div></body></html>

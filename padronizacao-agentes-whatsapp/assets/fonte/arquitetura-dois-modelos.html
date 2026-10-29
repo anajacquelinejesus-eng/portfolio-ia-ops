@@ -1,0 +1,54 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>
+.grid{display:grid;grid-template-columns:260px 70px 1fr;gap:0;align-items:center}
+.msg{background:#111A24;border:1px solid #1D2A38;border-radius:14px;padding:22px;text-align:center}
+.bubble{display:inline-block;background:#0E3B2E;color:#D7F5E8;border-radius:14px 14px 14px 4px;padding:10px 14px;font-size:15px;margin-top:12px;text-align:left}
+.fork{height:100%;position:relative}
+.lanes{display:flex;flex-direction:column;gap:0}
+.lane{border-radius:14px;padding:22px 24px;display:grid;grid-template-columns:1fr 34px 1fr;gap:14px;align-items:center}
+.lane.ctx{background:rgba(242,169,59,.07);border:1px solid rgba(242,169,59,.35)}
+.lane.cnv{background:rgba(0,207,255,.06);border:1px solid rgba(0,207,255,.35)}
+.lane h3{font-size:22px;font-weight:800;margin:6px 0 4px}
+.lane .who{font-size:14px;color:#9FB0BF}
+.reads{font-size:14px;line-height:1.55;color:#C9D4DE;margin-top:12px}
+.reads .no{color:#FF6B6B;font-weight:700}
+.out{background:#0A1119;border:1px solid #1D2A38;border-radius:12px;padding:16px 18px}
+.out ul{list-style:none;font-size:15px;line-height:1.75}
+.out li:before{content:"▸ ";color:#52CEF5}
+.ctx .out li:before{color:#F2A93B}
+.ar{color:#56677A;font-size:24px;text-align:center}
+.wall{display:flex;align-items:center;gap:14px;margin:14px 0}
+.wall .ln{flex:1;border-top:2px dashed #FF6B6B;opacity:.7}
+.wall span{color:#FF6B6B;font-weight:800;font-size:14px;letter-spacing:.14em;text-transform:uppercase}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+.rules .card p{font-size:15px;line-height:1.5;color:#C9D4DE;margin-top:8px}
+</style></head><body><div id="c">
+<div class="sup">Padronização de agentes</div>
+<h1>Dois modelos por turno, que não se enxergam</h1>
+<p class="lead">Cada mensagem do paciente é processada por dois modelos independentes. Um classifica a conversa, o outro decide o que dizer. Entender essa separação resolve metade dos bugs.</p>
+<div class="grid">
+ <div class="msg"><div class="k mu">Entrada</div><div class="bubble">Oi, queria marcar uma consulta para a semana que vem</div><div style="font-size:13px;color:#6B7C8D;margin-top:12px">mensagem do paciente</div></div>
+ <svg class="fork" viewBox="0 0 70 400" preserveAspectRatio="none" style="width:70px;height:400px"><path d="M0 200 C35 200 35 95 70 95" stroke="#F2A93B" stroke-width="2.5" fill="none"/><path d="M0 200 C35 200 35 305 70 305" stroke="#00CFFF" stroke-width="2.5" fill="none"/></svg>
+ <div class="lanes">
+  <div class="lane ctx">
+   <div><div class="k am">Aba Contexto</div><h3>Modelo de análise</h3><div class="who">roda antes da resposta</div>
+    <div class="reads">Lê a conversa e os dados do lead<br><span class="no">Não lê a aba Conversa</span></div></div>
+   <div class="ar">→</div>
+   <div class="out"><ul><li>Classificação</li><li>Funil</li><li>Followup</li><li>Avanço de etapa</li></ul></div>
+  </div>
+  <div class="wall"><div class="ln"></div><span>não se enxergam</span><div class="ln"></div></div>
+  <div class="lane cnv">
+   <div><div class="k cy">Aba Conversa</div><h3>Modelo de conversa</h3><div class="who">escreve a resposta</div>
+    <div class="reads">Lê o template base e a etapa atual<br><span class="no">Não lê a aba Contexto</span></div></div>
+   <div class="ar">→</div>
+   <div class="out"><ul><li>O que é dito ao paciente</li><li>Uma pergunta por vez</li><li>Ferramentas da etapa</li></ul></div>
+  </div>
+ </div>
+</div>
+<div class="rules">
+ <div class="card"><div class="k cy">Consequência 1</div><p>Classificação mora no Contexto e fala mora na Conversa. Quase toda situação precisa de um par de textos.</p></div>
+ <div class="card"><div class="k cy">Consequência 2</div><p>A análise roda antes da resposta e avalia só até a mensagem do paciente.</p></div>
+ <div class="card"><div class="k cy">Consequência 3</div><p>A etapa avança no máximo uma por turno e nunca retrocede.</p></div>
+</div>
+<div class="foot"><span>Diagrama ilustrativo, sem dados de clientes</span><span>Ana Jacqueline · Portfólio IA Ops</span></div>
+</div></body></html>

@@ -1,0 +1,43 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>
+.core{border:1px solid rgba(0,207,255,.35);background:linear-gradient(160deg,#0C1622,#0A1119);border-radius:16px;padding:24px 26px;display:grid;grid-template-columns:330px 1fr;gap:30px;align-items:center}
+.core h3{font-size:24px;font-weight:800;margin:6px 0 8px}
+.core p{font-size:15px;color:#9FB0BF;line-height:1.5}
+.slots{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.slot{font-family:'DejaVu Sans Mono',monospace;font-size:13px;color:#031019;background:#52CEF5;border-radius:7px;padding:9px 0;text-align:center;font-weight:700}
+.slot.ex{background:#0A1119;color:#52CEF5;border:1px dashed #109CC8;font-family:Inter;font-weight:600;grid-column:span 1}
+.fan{height:70px;width:100%}
+.models{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.m{background:#111A24;border:1px solid #1D2A38;border-radius:14px;padding:20px 22px}
+.m h4{font-family:'Inter Display';font-size:26px;font-weight:800;margin:4px 0 14px}
+.m table{width:100%;border-collapse:collapse;font-size:14.5px}
+.m td{padding:7px 0;border-top:1px solid #1D2A38}
+.m td:last-child{text-align:right;font-weight:700}
+.yes{color:#3DDC97}.no{color:#6B7C8D}
+.docs{margin-top:22px;display:flex;align-items:center;gap:20px;background:rgba(61,220,151,.06);border:1px solid rgba(61,220,151,.33);border-radius:14px;padding:18px 24px}
+.docs .num{font-size:52px;color:#3DDC97;line-height:1}
+.docs p{font-size:16px;color:#C9D4DE;line-height:1.45}
+</style></head><body><div id="c">
+<div class="sup">Padronização de agentes</div>
+<h1>Núcleo único, 17 slots, três modelos</h1>
+<p class="lead">O texto base é igual em qualquer clínica. O dado de cada médico entra só nos 17 slots nomeados. Implantar um agente deixou de ser escrever um prompt e passou a ser preencher 17 campos.</p>
+<div class="core">
+ <div><div class="k cy">Núcleo</div><h3>Template base comum</h3><p>Valor, pagamento, endereço e canais da equipe existem em um único lugar. As etapas citam a seção pelo nome e nunca copiam o dado.</p></div>
+ <div class="slots">
+  <div class="slot">01</div><div class="slot">02</div><div class="slot">03</div><div class="slot">04</div><div class="slot">05</div><div class="slot">06</div>
+  <div class="slot">07</div><div class="slot">08</div><div class="slot">09</div><div class="slot">10</div><div class="slot">11</div><div class="slot">12</div>
+  <div class="slot">13</div><div class="slot">14</div><div class="slot">15</div><div class="slot">16</div><div class="slot">17</div><div class="slot ex">slots</div>
+ </div>
+</div>
+<svg class="fan" viewBox="0 0 1272 70" preserveAspectRatio="none"><g stroke="#109CC8" stroke-width="2" fill="none"><path d="M636 0 V20 M636 20 H206 V70 M636 20 V70 M636 20 H1066 V70"/></g></svg>
+<div class="models">
+ <div class="m"><div class="k cy">Modelo</div><h4>CLOSER</h4><table>
+  <tr><td>Etapas</td><td>5</td></tr><tr><td>Consulta a agenda</td><td class="yes">sim</td></tr><tr><td>Cria o evento na agenda</td><td class="yes">sim</td></tr><tr><td>Quem confirma</td><td>a IA</td></tr><tr><td>Webhooks</td><td>28</td></tr><tr><td>Documentos</td><td>8</td></tr></table></div>
+ <div class="m"><div class="k cy">Modelo</div><h4>SDR V2</h4><table>
+  <tr><td>Etapas</td><td>4</td></tr><tr><td>Consulta a agenda</td><td class="yes">sim</td></tr><tr><td>Cria o evento na agenda</td><td class="no">não</td></tr><tr><td>Quem confirma</td><td>a equipe</td></tr><tr><td>Webhooks</td><td>26</td></tr><tr><td>Documentos</td><td>7</td></tr></table></div>
+ <div class="m"><div class="k cy">Modelo</div><h4>SDR</h4><table>
+  <tr><td>Etapas</td><td>3</td></tr><tr><td>Consulta a agenda</td><td class="no">não</td></tr><tr><td>Cria o evento na agenda</td><td class="no">não</td></tr><tr><td>Quem confirma</td><td>a equipe</td></tr><tr><td>Webhooks</td><td>24</td></tr><tr><td>Documentos</td><td>6</td></tr></table></div>
+</div>
+<div class="docs"><div class="num">21</div><p><b>documentos de implantação</b> gerados pelo mesmo pipeline, um por campo da plataforma, sem copiar e colar. Se o texto âncora de um patch some do núcleo, a geração para em vez de produzir um pacote errado.</p></div>
+<div class="foot"><span>Diagrama ilustrativo, sem dados de clientes</span><span>Ana Jacqueline · Portfólio IA Ops</span></div>
+</div></body></html>

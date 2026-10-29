@@ -1,0 +1,36 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>
+.wrap{display:flex;gap:28px;align-items:stretch}
+.main{flex:1.6}
+.bars{display:flex;flex-direction:column;gap:26px;margin-top:6px}
+.b .lab{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.b .lab span{font-size:15px;color:#9FB0BF;font-weight:600;letter-spacing:.04em}
+.b .lab .num{font-size:44px}
+.track{height:44px;background:#0A1119;border-radius:8px;overflow:hidden;border:1px solid #1D2A38}
+.fill{height:100%;border-radius:7px}
+.side{flex:1;display:flex;flex-direction:column;gap:20px}
+.big{font-size:88px;line-height:1;color:#3DDC97}
+.side .card p{color:#9FB0BF;font-size:15.5px;line-height:1.45;margin-top:8px}
+.side .card .num{font-size:46px;color:#E6EDF3}
+</style></head><body><div id="c">
+<div class="sup">Ongoing Ops Agent</div>
+<h1>SLA dos tickets: antes e depois</h1>
+<p class="lead">Tempo de atendimento dos tickets de ajuste depois que o roteiro passou a ser executado pelo agente, com a mesma equipe.</p>
+<div class="wrap">
+ <div class="card main">
+  <div class="k cy" style="margin-bottom:22px">Tempo médio de atendimento</div>
+  <div class="bars">
+   <div class="b"><div class="lab"><span>ANTES · tratamento manual</span><span class="num mu">~6h</span></div>
+    <div class="track"><div class="fill" style="width:100%;background:linear-gradient(90deg,#3A4756,#56677A)"></div></div></div>
+   <div class="b"><div class="lab"><span>DEPOIS · roteiro executado pelo agente</span><span class="num cy">~2h</span></div>
+    <div class="track"><div class="fill" style="width:33.3%;background:linear-gradient(90deg,#109CC8,#00CFFF)"></div></div></div>
+  </div>
+ </div>
+ <div class="side">
+  <div class="card" style="border-color:rgba(61,220,151,.35);background:rgba(61,220,151,.06)">
+   <div class="k gr">Redução</div><div class="num big">−67%</div><p>SLA 3x mais rápido</p></div>
+  <div class="card"><div class="k mu">Fila de ongoing</div><div class="num">170</div><p>tickets abertos em média, tratados pela mesma equipe</p></div>
+ </div>
+</div>
+<div class="foot"><span>Valores aproximados, conforme o estudo de caso</span><span>Ana Jacqueline · Portfólio IA Ops</span></div>
+</div></body></html>

@@ -1,0 +1,41 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>
+.wrap{display:grid;grid-template-columns:1.45fr 1fr;gap:28px}
+.cols{display:flex;gap:70px;align-items:flex-end;height:330px;padding:0 50px;border-bottom:2px solid #1D2A38;margin-top:20px}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.col .num{font-size:52px;margin-bottom:12px}
+.bar{width:100%;border-radius:10px 10px 0 0}
+.lbls{display:flex;gap:70px;padding:14px 50px 0}
+.lbls div{flex:1;text-align:center;font-size:15px;color:#9FB0BF;line-height:1.4}
+.lbls b{color:#E6EDF3;display:block;font-size:16px}
+.test{border:1px solid rgba(0,207,255,.35);background:rgba(0,207,255,.06)}
+.test q{display:block;font-size:19px;line-height:1.5;margin-top:12px;font-weight:600;quotes:"“" "”"}
+.test .d{margin-top:14px;font-size:15px;color:#9FB0BF}
+.list{margin-top:18px}
+.list .card{margin-bottom:12px}
+.list p{font-size:15px;line-height:1.5;color:#C9D4DE;margin-top:6px}
+</style></head><body><div id="c">
+<div class="sup">Padronização de agentes</div>
+<h1>Fila de atenção: de 71% para 25% de disparo</h1>
+<p class="lead">O campo que avisa a equipe para abrir a conversa disparava em quase todo atendimento, inclusive em leads que iam bem. Uma fila que aponta para tudo não é consultada por ninguém.</p>
+<div class="wrap">
+ <div class="card">
+  <div class="k cy">Disparo do campo de atenção</div>
+  <div class="cols">
+   <div class="col"><div class="num rd">71%</div><div class="bar" style="height:71%;background:linear-gradient(180deg,#FF6B6B,#7A2A33)"></div></div>
+   <div class="col"><div class="num cy">25%</div><div class="bar" style="height:25%;background:linear-gradient(180deg,#00CFFF,#0B5A75)"></div></div>
+  </div>
+  <div class="lbls"><div><b>Antes</b>dos atendimentos</div><div><b>Depois</b>nos cenários de teste</div></div>
+ </div>
+ <div>
+  <div class="card test"><div class="k cy">O teste de entrada</div>
+   <q>Alguém da equipe precisa abrir esta conversa nas próximas horas e fazer algo que a assistente não pode fazer?</q>
+   <div class="d">Na dúvida, <b style="color:#E6EDF3">falso</b>.</div></div>
+  <div class="list">
+   <div class="card"><div class="k gr">Deixaram de marcar</div><p>Intenção de agendar e pergunta de valor, os falsos positivos clássicos.</p></div>
+   <div class="card"><div class="k am">O que restou</div><p>Os disparos remanescentes eram pedidos reais de trabalho para a equipe.</p></div>
+  </div>
+ </div>
+</div>
+<div class="foot"><span>Antes: produção. Depois: bateria de cenários no simulador.</span><span>Ana Jacqueline · Portfólio IA Ops</span></div>
+</div></body></html>

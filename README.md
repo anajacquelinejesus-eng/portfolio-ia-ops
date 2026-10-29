@@ -47,7 +47,7 @@ Os diagramas dos estudos de caso foram desenhados em HTML e CSS. As fontes ficam
 
 ## Contato
 
-**Ana Jacqueline** · Tech Lead
+**Ana Jacqueline** 
 
 - LinkedIn: [linkedin.com/in/ajacqueline](https://www.linkedin.com/in/ajacqueline)
 - E-mail: [anajacquelinejesus@gmail.com](mailto:anajacquelinejesus@gmail.com)
